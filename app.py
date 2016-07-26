@@ -32,8 +32,8 @@ stop = int(detail[6])                               # while stop has the index 6
 
 # Used message ids
 #
-# Every message has an unique ID, which we can check if we've already stored it.
-# Querying a specific timestamp will not just return messages form that timestamp,
+# Every message has an unique ID, which can be used for checking if we've already stored it.
+# Querying a specific timestamp will not just return messages from that timestamp,
 # but also messages that has been sent a few seconds after as well.
 # I'm not sure what the time frame is.
 messageIds = []
