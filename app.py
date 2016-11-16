@@ -8,14 +8,14 @@ if len(sys.argv) >= 2:
 else:
     videoId = 'v' + raw_input('Video ID: ').replace('v', '')
 
-# Program requires at least settings.example.json or settings.json to run properly
+# Program requires at least example.setting.json or settings.json to run properly
 if not os.path.isfile('example.settings.json') and not os.path.isfile('settings.json'):
     print 'Error: Missing settings file.'
     sys.exit(1)
 
 # Copy settings example file if settings.json doesn't exist
 if not os.path.isfile('settings.json'):
-    shutil.copyfile('settings.example.json', 'settings.json')
+    shutil.copyfile('example.settings.json', 'settings.json')
 
 # Load settings
 with open('settings.json', 'r') as settings_file:
