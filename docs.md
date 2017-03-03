@@ -4,7 +4,7 @@
 
 ``` bash
 
-python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 
+python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 1
 
 ```
 
