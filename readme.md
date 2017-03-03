@@ -13,23 +13,23 @@ Neat python script to download chat messages from past broadcasts
 pip install -r requirements.txt
 ```
 
-### Usage
+### Usage examples
 
 ```bash
-python app.py 80123392
+python app.py
 ```
-*Now, just replace the number with any video id, found in the url of the vod.*
 
-### Settings
-
-When running the program for the first time, `example.settings.json` will be copied to `settings.json`. The command below sets video and client ID, however, they are both optional parameters when running the script.
 ```bash
-python app.py <video_id> <client_id>
+python app.py --help
+```
+
+```bash
+python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 0 --print
 ```
 
 ### Notes
 
-- A client ID is currently not required by Twitch. If they eventually decides to require a client ID, `require_client_id` in `settings.json` should be set to `true` to require a client ID when running the script.
-- Empty messages means the user has been timed out. There's no known way to get these messages.
-- This script is using Twitch's undocumented ReChat API. The script may break at any time.
-- The longer VOD, the more API calls are made to Twitch (possibly thousands). Use with care and stay up to date on any rate limits.
+- A client ID is currently not required by Twitch. If they eventually decides to require a client ID, `require_client_id` in `settings.json` should be set to `true`.
+- Empty messages means the user has been timed out. There's no known way to get these.
+- This script is using Twitch's undocumented ReChat API. it might break at any time.
+- Consider increasing the delay between API calls in `settings.json` to avoid a potential temporary block from Twitch for sending too many requests when downloading messages from very long streams.

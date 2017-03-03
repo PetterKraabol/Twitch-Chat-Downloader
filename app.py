@@ -1,10 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import requests, sys, time, os, json, shutil
+import requests, sys, time, os, json, shutil, argparse, datetime
+
+# Parse arguments
+parser = argparse.ArgumentParser(description='Twitch Chat Downloader')
+parser.add_argument('-v', '--video', help='Video id')
+parser.add_argument('-i', '--client-id', help='Twitch client id')
+parser.add_argument('-p', '--print', dest='p', help='Print messages', action='store_true')
+parser.add_argument('-o', '--output', help='Output folder')
+parser.add_argument('-f', '--format', help='Message format', choices=['timestamp', 'relative', 'srt', 'ssa', 'ass'])
+parser.add_argument('--cooldown', type=float, help='Cooldown time between API requests in seconds')
+parser.add_argument('--start', type=int, help='Start time in seconds from video start')
+parser.add_argument('--stop', type=int, help='Stop time in seconds from video start')
+
+arguments = parser.parse_args()
 
 # Get video ID
-if len(sys.argv) >= 2:
-    videoId = 'v' + sys.argv[1].replace('v', '')
+if arguments.video:
+    videoId = 'v' + arguments.video.replace('v', '')
 else:
     videoId = 'v' + raw_input('Video ID: ').replace('v', '')
 
@@ -22,9 +35,9 @@ with open('settings.json', 'r') as settings_file:
     settings = json.load(settings_file)
 
 # Check if a client_id was provided as an argument
-if len(sys.argv) >= 3:
-    if not sys.argv[2] == settings['client_id']:
-        settings['client_id'] = sys.argv[2]
+if arguments.client_id:
+    if not arguments.client_id == settings['client_id']:
+        settings['client_id'] = arguments.client_id
         answer = raw_input('Save client ID? (Y/n): ')
         if (not answer.lower() == "n"):
             with open('settings.json', 'w') as settings_file:
@@ -45,6 +58,16 @@ def getClientIdParameter():
         return 'client_id='+settings['client_id'] + '&'
     else:
         return ''
+
+# Overwrite remaining settings with arguments
+if arguments.p:
+    settings['print'] = arguments.p
+
+if arguments.format:
+    settings['format'] = arguments.format
+
+if arguments.cooldown:
+    settings['cooldown'] = arguments.cooldown
 
 # API URL
 apiUrl = 'https://rechat.twitch.tv/rechat-messages'
@@ -81,15 +104,17 @@ if len(detail) != 7:
         print 'Error: Invalid video ID'
     sys.exit(1)
 
-start = int(detail[4])                              # The start timestamp is on index 4
-stop = int(detail[6])                               # while stop has the index 6
+
+start = int(detail[4])    # The start timestamp is on index 4
+stop = int(detail[6])     # while stop has the index 6
+
+# Overwrite start time with argument
+
 
 # Used message ids
 #
 # Every message has an unique ID, which can be used for checking if we've already stored it.
-# Querying a specific timestamp will not just return messages from that timestamp,
-# but also messages that has been sent a few seconds after as well.
-# I'm not sure what the time frame is.
+# Querying a specific timestamp will return messages within the next 30 seconds
 messageIds = []
 
 # Open output file
@@ -97,46 +122,86 @@ messageIds = []
 # This is where we save the messages.
 
 # Output directory
-directory = settings['folder']
+
+if arguments.output:
+    directory = arguments.output
+else:
+    directory = settings['output']
+
 if not os.path.exists(directory):
     os.makedirs(directory)
 
-# Filename
-file = open(directory + '/' + videoId + '.txt', 'w')
+# Open file (different file extension for subtitle formats)
+if settings['format'] == 'srt' or settings['format'] == 'ssa' or settings['format'] == 'ass':
+    file = open(directory + '/' + videoId + '.' + settings['format'], 'w')
+else:
+    file = open(directory + '/' + videoId + '.txt', 'w')
 
+# Add format line if SSA/ASS subtitle format
+if settings['format'] == 'ssa' or settings['format'] == 'ass':
+    file.write('Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text')
 
 # Download messages from timestamps between start and stop.
 timestamp = start
+
+# Start time argument
+if arguments.start:
+    timestamp += arguments.start
+
+# Stop time argument
+if arguments.stop:
+    stop = start + arguments.stop
+
 while timestamp <= stop:
 
-    # Request messages from Twitch
+    # Wait for cooldown timer and request new messages from Twitch
+    time.sleep(settings['cooldown'])
     response = requests.get(apiUrl + '?start=' + str(timestamp) + '&video_id=' + videoId).json()
     data = response['data'];
 
-    # Increase by one (will be overwritten if new messages are found).
-    timestamp += 1
+    # Increase timestamp by 30 to get the next 30
+    # seconds of messages in next loop
+    timestamp += 30
 
     for message in data:
 
+        # Timestamp for message (seconds)
+        message['time'] = message['attributes']['timestamp']/1000.
+
         # Check the unique message ID to make sure it's not already saved.
-        if not any(message['id'] in s for s in messageIds):
+        if not any(message['id'] in s for s in messageIds) and message['time'] <= stop:
 
             # If this is a new message, save the unique ID to prevent duplication later.
             messageIds.append(message['id'])
-
-            # Message data
-            date    = time.strftime('%m/%d/%Y %H:%M:%S',  time.gmtime(message['attributes']['timestamp']/1000.))
+            date    = time.strftime('%Y-%m-%d %H:%M:%S %Z', time.gmtime(message['time']))
             sender  = message['attributes']['from'].encode('utf-8')
             text    = message['attributes']['message'].encode('utf-8')
 
-            # Append message to output file
-            file.write(date + ' ' + sender + ': ' + text + '\n')
+            # Timestamp format
+            if settings['format'] == 'timestamp':
+                line = date + ' ' + sender + ': ' + text + '\n'
+                printLine = '\033[94m' + date + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+
+            # Relative timestamp format
+            if settings['format'] == 'relative':
+                line = str(datetime.timedelta(seconds=message['time']-start)) + ' ' + sender + ': ' + text + '\n'
+                printLine = '\033[94m' + str(datetime.timedelta(seconds=message['time']-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+
+            # srt format
+            if settings['format'] == 'srt':
+                line = str(len(messageIds)) + '\n' + str(datetime.timedelta(seconds=message['time'] - start))[:-3] + ' --> ' + str(datetime.timedelta(seconds=message['time'] - start + 2))[:-3] + '\n' + sender + ': ' + text + '\n\n'
+                printLine = printLine = '\033[94m' + str(datetime.timedelta(seconds=message['time']-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+
+            # SSA/ASS format
+            if settings['format'] == 'ssa' or settings['format'] == 'ass':
+                line = 'Dialogue: Marked=0,' + str(datetime.timedelta(seconds=message['time'] - start))[:-4] + ',' + str(datetime.timedelta(seconds=message['time'] - start + 2))[:-4] + ',Wolf main,Cher,0000,0000,0000,,' + sender + ': ' + text + '\n'
+                printLine = printLine = '\033[94m' + str(datetime.timedelta(seconds=message['time']-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+
+            file.write(line)
 
             # Print messages, if not, show progress
             if settings['print']:
-
-                # Print messages
-                print '\033[94m' + date + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+                print printLine
             else:
 
                 #Show progress %
@@ -148,15 +213,8 @@ while timestamp <= stop:
                 if percentage > 100.0:
                     percentage = 100.0
 
-                sys.stdout.write('Downloading... (' + str(percentage) + '%)\r')
+                sys.stdout.write('Downloading ' + str(int(message['time'] - start - arguments.start)) + '/' + str(stop - start - arguments.start) + 's (' + str(percentage) + '%) \r')
                 sys.stdout.flush()
-
-            # Set timestamp to this message's timestamp to improve
-            # performance and skip timestamps where no new messages are coming in.
-            #
-            # Note: The message timestamp is divided by 1000 because the ReChat API
-            # query does not want the last 3 digits (for whatever reason)
-            timestamp = int(message['attributes']['timestamp']/1000)
 
 # Close file
 file.close()
