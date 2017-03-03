@@ -114,7 +114,6 @@ stop = int(detail[6])     # while stop has the index 6
 # Used message ids
 #
 # Every message has an unique ID, which can be used for checking if we've already stored it.
-# Querying a specific timestamp will return messages within the next 30 seconds
 messageIds = []
 
 # Open output file
@@ -155,12 +154,12 @@ if arguments.stop:
 while timestamp <= stop:
 
     # Wait for cooldown timer and request new messages from Twitch
+    # The API returns the next 30 seconds of messages
     time.sleep(settings['cooldown'])
     response = requests.get(apiUrl + '?start=' + str(timestamp) + '&video_id=' + videoId).json()
     data = response['data'];
 
-    # Increase timestamp by 30 to get the next 30
-    # seconds of messages in next loop
+    # Increase timestamp to get the next 30 seconds of messages in the next loop
     timestamp += 30
 
     for message in data:
@@ -213,7 +212,7 @@ while timestamp <= stop:
                 if percentage > 100.0:
                     percentage = 100.0
 
-                sys.stdout.write('Downloading ' + str(int(message['time'] - start - arguments.start)) + '/' + str(stop - start - arguments.start) + 's (' + str(percentage) + '%) \r')
+                sys.stdout.write('Downloading ' + str(int(message['time'] - start)) + '/' + str(stop - start) + 's (' + str(percentage) + '%) \r')
                 sys.stdout.flush()
 
 # Close file
