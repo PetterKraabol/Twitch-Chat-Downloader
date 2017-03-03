@@ -104,12 +104,13 @@ if len(detail) != 7:
         print 'Error: Invalid video ID'
     sys.exit(1)
 
-
+# Start and stop points
 start = int(detail[4])    # The start timestamp is on index 4
 stop = int(detail[6])     # while stop has the index 6
 
-# Overwrite start time with argument
-
+# Original start and stop
+fullStart = start         # Keep original full-length start point
+fullStop = stop           # Keep original full-length stop potin
 
 # Used message ids
 #
@@ -140,16 +141,18 @@ else:
 if settings['format'] == 'ssa' or settings['format'] == 'ass':
     file.write('Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text')
 
-# Download messages from timestamps between start and stop.
-timestamp = start
+# Stop time argument
+if arguments.stop and start + arguments.stop <= stop:
+    stop = start + arguments.stop
+
 
 # Start time argument
 if arguments.start:
-    timestamp += arguments.start
+    start += arguments.start
 
-# Stop time argument
-if arguments.stop:
-    stop = start + arguments.stop
+
+# Download messages from timestamps between start and stop.
+timestamp = start
 
 while timestamp <= stop:
 
@@ -183,7 +186,7 @@ while timestamp <= stop:
 
             # Relative timestamp format
             if settings['format'] == 'relative':
-                line = str(datetime.timedelta(seconds=message['time']-start)) + ' ' + sender + ': ' + text + '\n'
+                line = str(datetime.timedelta(seconds=message['time'] - start)) + ' ' + sender + ': ' + text + '\n'
                 printLine = '\033[94m' + str(datetime.timedelta(seconds=message['time']-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
             # srt format
@@ -193,7 +196,7 @@ while timestamp <= stop:
 
             # SSA/ASS format
             if settings['format'] == 'ssa' or settings['format'] == 'ass':
-                line = 'Dialogue: Marked=0,' + str(datetime.timedelta(seconds=message['time'] - start))[:-4] + ',' + str(datetime.timedelta(seconds=message['time'] - start + 2))[:-4] + ',Wolf main,Cher,0000,0000,0000,,' + sender + ': ' + text + '\n'
+                line = 'Dialogue: Marked=0,' + str(datetime.timedelta(seconds=message['time'] - start))[:-4] + ',' + str(datetime.timedelta(seconds=message['time'] - start + 2))[:-4] + ',Wolf main,' + sender + ',0000,0000,0000,,' + sender + ': ' + text + '\n'
                 printLine = printLine = '\033[94m' + str(datetime.timedelta(seconds=message['time']-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
             file.write(line)
@@ -204,15 +207,13 @@ while timestamp <= stop:
             else:
 
                 #Show progress %
-                progress = timestamp - start
-                done = stop - start
-                percentage = round(progress*100 / float(done), 2)
+                progress = round((timestamp - start)*100 / float(stop - start), 2)
 
-                # Bigfix: percentage goes slightly above 100
-                if percentage > 100.0:
-                    percentage = 100.0
+                # Bugfix: progress can go slightly above 100% on the last loop
+                if progress > 100.0:
+                    progress = 100.0
 
-                sys.stdout.write('Downloading ' + str(int(message['time'] - start)) + '/' + str(stop - start) + 's (' + str(percentage) + '%) \r')
+                sys.stdout.write('Downloading ' + str(int(message['time'] - start)) + '/' + str(stop - start) + 's (' + str(progress) + '%) \r')
                 sys.stdout.flush()
 
 # Close file
