@@ -17,10 +17,10 @@ python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 1
 | require_client_id | *Boolean* | Whether or not to require Twitch client-id |
 | client_id | *String* | Twitch client-id |
 | output | *String* | Output folder |
-| format | *String* | Message format. Available options: `timestamp` `relative` `srt` `ssa` `ass` |
+| format | *String* | Message format. Available options: `timestamp` `relative` `srt` `ssa` `ass` `raw` |
 | print | *Boolean* | `true` displays messages as they are downloaded. `false` displays download progress. |
 
-## Arguments
+### Arguments
 
 *Override existing settings* 
 
@@ -36,10 +36,18 @@ python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 1
 | `--start` | Start time in seconds from video start |
 | `--stop` | Stop time in seconds from video start |
 
-## Formats
+### Formats
 
 | Formats | Description |
 | ------- | ----------- |
-| `timestamp` | shows the time on your timezone. |
-| `relative` | shows the time from the start of the video |
+| `timestamp` | Message timestamp on your timezone. |
+| `relative` | Message timestamp is the time from the start of the video or time specified by the --start argument |
 | `srt` `ssa` `ass` | subtitle formats
+| `raw` | json array of messages |
+
+
+### Versions
+
+The settings version number is to make sure your `settings.json` can be properly read by the script. Your version number is compared with with `example.settings.json` which is more likely to be up to date.
+
+If your settings is outdated, compare it with `example.settings.json` to make sure they have the same structure and version number.

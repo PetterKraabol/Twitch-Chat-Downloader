@@ -8,7 +8,7 @@ parser.add_argument('-v', '--video', help='Video id')
 parser.add_argument('-i', '--client-id', help='Twitch client id')
 parser.add_argument('-p', '--print', dest='p', help='Print messages', action='store_true')
 parser.add_argument('-o', '--output', help='Output folder')
-parser.add_argument('-f', '--format', help='Message format', choices=['timestamp', 'relative', 'srt', 'ssa', 'ass'])
+parser.add_argument('-f', '--format', help='Message format', choices=['timestamp', 'relative', 'srt', 'ssa', 'ass', 'raw'])
 parser.add_argument('--cooldown', type=float, help='Cooldown time between API requests in seconds')
 parser.add_argument('--start', type=int, help='Start time in seconds from video start')
 parser.add_argument('--stop', type=int, help='Stop time in seconds from video start')
@@ -33,6 +33,16 @@ if not os.path.isfile('settings.json'):
 # Load settings
 with open('settings.json', 'r') as settings_file:
     settings = json.load(settings_file)
+
+# Check settings version
+if os.path.isfile('example.settings.json'):
+    with open('example.settings.json', 'r') as example_settings_file:
+        exampleSettings = json.load(example_settings_file)
+        if 'version' not in settings:
+            print '[Warning]\nYour settings.json file does not contain a version number. Compare settings.json to example.settings.json to make sure it\'s up to date.\n'
+
+        elif 'version' in settings and settings['version'] != exampleSettings['version']:
+            print '[Warning]\nYour settings.json file is outdated. Compare settings.json to example.settings.json.\nYour version: ' + settings['version'] + '\nNewest version: ' + exampleSettings['version'] + '\n'
 
 # Check if a client_id was provided as an argument
 if arguments.client_id:
@@ -134,12 +144,28 @@ if not os.path.exists(directory):
 # Open file (different file extension for subtitle formats)
 if settings['format'] == 'srt' or settings['format'] == 'ssa' or settings['format'] == 'ass':
     file = open(directory + '/' + videoId + '.' + settings['format'], 'w')
+elif settings['format'] == 'raw':
+    file = open(directory + '/' + videoId + '.json', 'w')
 else:
     file = open(directory + '/' + videoId + '.txt', 'w')
 
 # Add format line if SSA/ASS subtitle format
 if settings['format'] == 'ssa' or settings['format'] == 'ass':
-    file.write('Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text')
+    file.write('[Script Info]\n')
+    file.write('Timer: 100,0000\n')
+
+    file.write('\n[V4 Styles]\n')
+    file.write(settings['ssa_style_format'] + '\n')
+    file.write(settings['ssa_style_default']  + '\n')
+
+    file.write('\n[Events]\n')
+    file.write(settings['ssa_events_format'] + '\n')
+
+# When saving as raw format (json), messages will be added to this
+# object array and written to file after fetching all the messages
+# to avoid opening, reading, writing to and closing the file for every
+# message.
+rawData = []
 
 # Stop time argument
 if arguments.stop and start + arguments.stop <= stop:
@@ -168,16 +194,22 @@ while timestamp <= stop:
     for message in data:
 
         # Timestamp for message (seconds)
-        message['time'] = message['attributes']['timestamp']/1000.
+        messageTimestampInSeconds = message['attributes']['timestamp']/1000.
 
         # Check the unique message ID to make sure it's not already saved.
-        if not any(message['id'] in s for s in messageIds) and message['time'] <= stop:
+        if not any(message['id'] in s for s in messageIds) and messageTimestampInSeconds <= stop:
 
             # If this is a new message, save the unique ID to prevent duplication later.
             messageIds.append(message['id'])
-            date    = time.strftime('%Y-%m-%d %H:%M:%S %Z', time.gmtime(message['time']))
+            date    = time.strftime('%Y-%m-%d %H:%M:%S %Z', time.gmtime(messageTimestampInSeconds))
             sender  = message['attributes']['from'].encode('utf-8')
+            color   = message['attributes']['color']
             text    = message['attributes']['message'].encode('utf-8')
+
+            if color is None:
+                color = '000000'
+            else:
+                color = color.replace('#', '')
 
             # Timestamp format
             if settings['format'] == 'timestamp':
@@ -186,20 +218,26 @@ while timestamp <= stop:
 
             # Relative timestamp format
             if settings['format'] == 'relative':
-                line = str(datetime.timedelta(seconds=message['time'] - start)) + ' ' + sender + ': ' + text + '\n'
-                printLine = '\033[94m' + str(datetime.timedelta(seconds=message['time']-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+                line = str(datetime.timedelta(seconds=messageTimestampInSeconds - start)) + ' ' + sender + ': ' + text + '\n'
+                printLine = '\033[94m' + str(datetime.timedelta(seconds=messageTimestampInSeconds-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
             # srt format
             if settings['format'] == 'srt':
-                line = str(len(messageIds)) + '\n' + str(datetime.timedelta(seconds=message['time'] - start))[:-3] + ' --> ' + str(datetime.timedelta(seconds=message['time'] - start + 2))[:-3] + '\n' + sender + ': ' + text + '\n\n'
-                printLine = printLine = '\033[94m' + str(datetime.timedelta(seconds=message['time']-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+                line = str(len(messageIds)) + '\n' + str(datetime.timedelta(seconds=messageTimestampInSeconds - start))[:-3] + ' --> ' + str(datetime.timedelta(seconds=messageTimestampInSeconds - start + 2))[:-3] + '\n' + sender + ': ' + text + '\n\n'
+                printLine = printLine = '\033[94m' + str(datetime.timedelta(seconds=messageTimestampInSeconds-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
             # SSA/ASS format
             if settings['format'] == 'ssa' or settings['format'] == 'ass':
-                line = 'Dialogue: Marked=0,' + str(datetime.timedelta(seconds=message['time'] - start))[:-4] + ',' + str(datetime.timedelta(seconds=message['time'] - start + 2))[:-4] + ',Wolf main,' + sender + ',0000,0000,0000,,' + sender + ': ' + text + '\n'
-                printLine = printLine = '\033[94m' + str(datetime.timedelta(seconds=message['time']-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+                line = 'Dialogue: Marked=0, ' + str(datetime.timedelta(seconds=messageTimestampInSeconds - start))[:-4] + ', ' + str(datetime.timedelta(seconds=500))[:-4] + ', Default, ' + sender + ', 0000, 0000, 0000 , , {\c&H' + color + '&}' + sender + '{\c&H000000&}: ' + text + '\n'
+                printLine = printLine = '\033[94m' + str(datetime.timedelta(seconds=messageTimestampInSeconds-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
-            file.write(line)
+            if settings['format'] == 'raw':
+                rawData.append(message)
+
+            # Save messages to file unless saving raw data.
+            # This is done after download all messages
+            if settings['format'] != 'raw':
+                file.write(line)
 
             # Print messages, if not, show progress
             if settings['print']:
@@ -213,8 +251,12 @@ while timestamp <= stop:
                 if progress > 100.0:
                     progress = 100.0
 
-                sys.stdout.write('Downloading ' + str(int(message['time'] - start)) + '/' + str(stop - start) + 's (' + str(progress) + '%) \r')
+                sys.stdout.write('Downloading ' + str(int(messageTimestampInSeconds - start)) + '/' + str(stop - start) + 's (' + str(progress) + '%) \r')
                 sys.stdout.flush()
+
+# If format is set to raw, save raw data
+if settings['format'] == 'raw':
+    file.write(json.dumps(rawData))
 
 # Close file
 file.close()
