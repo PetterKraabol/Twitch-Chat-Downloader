@@ -222,7 +222,7 @@ while timestamp <= stop:
                 printLine = '\033[94m' + str(datetime.timedelta(seconds=messageTimestampInSeconds-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
             # Subtitle formats
-            if ['srt', 'ass', 'ssa'].index(settings['format']) != -1:
+            if settings['format'] in {'srt', 'ass', 'ssa'}:
                 subtitleStart = str(datetime.timedelta(seconds=messageTimestampInSeconds - start))
                 subtitleStop = str(datetime.timedelta(seconds=messageTimestampInSeconds - start + 2))
 
