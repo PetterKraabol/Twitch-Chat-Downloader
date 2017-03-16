@@ -210,6 +210,7 @@ while timestamp <= stop:
                 color = 'FFFFFF'
             else:
                 color = color.replace('#', '')
+                color = str(color)
 
             # Timestamp format
             if settings['format'] == 'timestamp':
