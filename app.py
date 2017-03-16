@@ -207,7 +207,7 @@ while timestamp <= stop:
             text    = message['attributes']['message'].encode('utf-8')
 
             if color is None:
-                color = '000000'
+                color = 'FFFFFF'
             else:
                 color = color.replace('#', '')
 
@@ -240,8 +240,13 @@ while timestamp <= stop:
                     printLine = printLine = '\033[94m' + subtitleStart + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
                 # SSA/ASS format
+                # Note: sender's color code is reversed for SSA and ASS format.
                 if settings['format'] == 'ssa' or settings['format'] == 'ass':
-                    line = 'Dialogue: Marked=0, ' + subtitleStart[:-4] + ', ' + subtitleStop[:-4] + ', Default, ' + sender + ', 0000, 0000, 0000 , , {\c&H' + color + '&}' + sender + '{\c&H000000&}: ' + text + '\n'
+
+                    # SSA/ASS expects BGR instead of RBG
+                    BGRColor = color[4:6] + color[2:4] + color[0:2]
+
+                    line = 'Dialogue: Marked=0, ' + subtitleStart[:-4] + ', ' + subtitleStop[:-4] + ', Default, ' + sender + ', 0000, 0000, 0000 , , {\c&H' + BGRColor + '&}' + sender + '{\c&HFFFFFF&}: ' + text + '\n'
                     printLine = printLine = '\033[94m' + str(datetime.timedelta(seconds=messageTimestampInSeconds - start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
 
