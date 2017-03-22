@@ -12,6 +12,7 @@ parser.add_argument('-f', '--format', help='Message format', choices=['timestamp
 parser.add_argument('--cooldown', type=float, help='Cooldown time between API requests in seconds')
 parser.add_argument('--start', type=int, help='Start time in seconds from video start')
 parser.add_argument('--stop', type=int, help='Stop time in seconds from video start')
+parser.add_argument('--duration', type=int, help='If using a subtitle format, subtitle duration in seconds')
 
 arguments = parser.parse_args()
 
@@ -224,7 +225,7 @@ while timestamp <= stop:
             # Subtitle formats
             if settings['format'] in {'srt', 'ass', 'ssa'}:
                 subtitleStart = str(datetime.timedelta(seconds=messageTimestampInSeconds - start))
-                subtitleStop = str(datetime.timedelta(seconds=messageTimestampInSeconds - start + 2))
+                subtitleStop = str(datetime.timedelta(seconds=messageTimestampInSeconds - start + settings['duration']))
 
                 # Bugfix - add milliseconds if missing
                 # https://github.com/PetterKraabol/Twitch-Chat-Downloader/issues/3
