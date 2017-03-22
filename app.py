@@ -215,6 +215,9 @@ while timestamp <= stop:
             else:
                 color = color.replace('#', '')
 
+            # Bugfix https://github.com/PetterKraabol/Twitch-Chat-Downloader/issues/6
+            color = str(color)
+
             # Timestamp format
             if settings['format'] == 'timestamp':
                 line = date + ' ' + sender + ': ' + text + '\n'
