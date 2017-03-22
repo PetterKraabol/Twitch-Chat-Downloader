@@ -8,12 +8,15 @@ Neat python script to download chat messages from past broadcasts
 - [pip](https://pip.pypa.io/en/stable/installing/)
 - [Requests library installation guide](http://docs.python-requests.org/en/master/user/install/)
 
-### Install requirements
+### Installation
+
 ```bash
+git clone git@github.com:PetterKraabol/Twitch-Chat-Downloader.git
+cd Twitch-Chat-Downloader
 pip install -r requirements.txt
 ```
 
-### Usage examples
+### Usage
 
 ```bash
 python app.py
@@ -24,7 +27,7 @@ python app.py --help
 ```
 
 ```bash
-python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 0 --print
+python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 0 --print --output ~/Downloads
 ```
 
 ### Notes
