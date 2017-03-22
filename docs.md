@@ -35,6 +35,7 @@ python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 1
 | `--cooldown` | Cooldown time between API requests in seconds |
 | `--start` | Start time in seconds from video start |
 | `--stop` | Stop time in seconds from video start |
+| `--duration` | If using a subtitle format, subtitle duration in seconds |
 
 ### Formats
 
