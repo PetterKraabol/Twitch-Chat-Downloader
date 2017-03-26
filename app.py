@@ -214,6 +214,7 @@ while timestamp <= stop:
                 color = 'FFFFFF'
             else:
                 color = color.replace('#', '')
+                color = str(color)
 
             # Bugfix https://github.com/PetterKraabol/Twitch-Chat-Downloader/issues/6
             color = str(color)
