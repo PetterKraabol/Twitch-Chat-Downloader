@@ -225,8 +225,13 @@ while timestamp <= stop:
 
             # Relative timestamp format
             if settings['format'] == 'relative':
-                line = str(datetime.timedelta(seconds=messageTimestampInSeconds - start)) + ' ' + sender + ': ' + text + '\n'
-                printLine = '\033[94m' + str(datetime.timedelta(seconds=messageTimestampInSeconds-start)) + ' \033[92m'+ sender + '\033[0m' + ': ' + text
+                messageRelativeTimestamp = str(datetime.timedelta(seconds=messageTimestampInSeconds - start))
+                
+                if len(messageRelativeTimestamp) == 7:
+                    messageRelativeTimestamp += '.000000'
+                
+                line = messageRelativeTimestamp[:-3] + ' ' + sender + ': ' + text + '\n'
+                printLine = '\033[94m' + messageRelativeTimestamp[:-3] + ' \033[92m'+ sender + '\033[0m' + ': ' + text
 
             # Subtitle formats
             if settings['format'] in {'srt', 'ass', 'ssa'}:
