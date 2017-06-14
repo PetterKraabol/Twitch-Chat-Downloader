@@ -5,9 +5,12 @@ import requests, sys, time, os, json, shutil, argparse, datetime
 try:
     # On Python 2, the function to use is raw_input
     input = raw_input
+    # And the native string type is bytes, so we need UTF-8
+    def enc(s): return s.encode('utf-8')
 except NameError:
     # On Python 3, the input() function is the one we want.
-    pass
+    # And the native string type is Unicode.
+    def enc(s): return s
 
 # Parse arguments
 parser = argparse.ArgumentParser(description='Twitch Chat Downloader')
@@ -213,9 +216,9 @@ while timestamp <= stop:
             # If this is a new message, save the unique ID to prevent duplication later.
             messageIds.append(message['id'])
             date    = time.strftime('%Y-%m-%d %H:%M:%S %Z', time.gmtime(messageTimestampInSeconds))
-            sender  = message['attributes']['from'].encode('utf-8')
+            sender  = enc(message['attributes']['from'])
             color   = message['attributes']['color']
-            text    = message['attributes']['message'].encode('utf-8')
+            text    = enc(message['attributes']['message'])
 
             if color is None:
                 color = 'FFFFFF'
