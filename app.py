@@ -2,6 +2,16 @@
 # -*- coding: utf-8 -*-
 import requests, sys, time, os, json, shutil, argparse, datetime
 
+try:
+    # On Python 2, the function to use is raw_input
+    input = raw_input
+    # And the native string type is bytes, so we need UTF-8
+    def enc(s): return s.encode('utf-8')
+except NameError:
+    # On Python 3, the input() function is the one we want.
+    # And the native string type is Unicode.
+    def enc(s): return s
+
 # Parse arguments
 parser = argparse.ArgumentParser(description='Twitch Chat Downloader')
 parser.add_argument('-v', '--video', help='Video id')
@@ -20,11 +30,11 @@ arguments = parser.parse_args()
 if arguments.video:
     videoId = 'v' + arguments.video.replace('v', '')
 else:
-    videoId = 'v' + raw_input('Video ID: ').replace('v', '')
+    videoId = 'v' + input('Video ID: ').replace('v', '')
 
 # Program requires at least example.setting.json or settings.json to run properly
 if not os.path.isfile('example.settings.json') and not os.path.isfile('settings.json'):
-    print 'Error: Missing settings file.'
+    print('Error: Missing settings file.')
     sys.exit(1)
 
 # Copy settings example file if settings.json doesn't exist
@@ -40,25 +50,25 @@ if os.path.isfile('example.settings.json'):
     with open('example.settings.json', 'r') as example_settings_file:
         exampleSettings = json.load(example_settings_file)
         if 'version' not in settings:
-            print '[Warning]\nYour settings.json file does not contain a version number. Compare settings.json to example.settings.json to make sure it\'s up to date.\n'
+            print('[Warning]\nYour settings.json file does not contain a version number. Compare settings.json to example.settings.json to make sure it\'s up to date.\n')
 
         elif 'version' in settings and settings['version'] != exampleSettings['version']:
-            print '[Warning]\nYour settings.json file is outdated. Compare settings.json to example.settings.json.\nYour version: ' + settings['version'] + '\nNewest version: ' + exampleSettings['version'] + '\n'
+            print('[Warning]\nYour settings.json file is outdated. Compare settings.json to example.settings.json.\nYour version: ' + settings['version'] + '\nNewest version: ' + exampleSettings['version'] + '\n')
 
 # Check if a client_id was provided as an argument
 if arguments.client_id:
     if not arguments.client_id == settings['client_id']:
         settings['client_id'] = arguments.client_id
-        answer = raw_input('Save client ID? (Y/n): ')
+        answer = input('Save client ID? (Y/n): ')
         if (not answer.lower() == "n"):
             with open('settings.json', 'w') as settings_file:
                 json.dump(settings, settings_file)
 
 # Check if client_id is required
 if settings['require_client_id'] and not settings['client_id']:
-    print "Twitch requires a client ID to use their API.\nRegister an application on https://www.twitch.tv/settings/connections to get yours."
-    settings['client_id'] = raw_input('Client ID: ')
-    answer = raw_input('Save client ID? (Y/n): ')
+    print("Twitch requires a client ID to use their API.\nRegister an application on https://www.twitch.tv/settings/connections to get yours.")
+    settings['client_id'] = input('Client ID: ')
+    answer = input('Save client ID? (Y/n): ')
     if (not answer.lower() == "n"):
         with open('settings.json', 'w') as settings_file:
             json.dump(settings, settings_file)
@@ -113,9 +123,9 @@ detail = response['errors'][0]['detail'].split(' ') # We split the detail string
 # If the length is 7, it's (most likely) valid
 if len(detail) != 7:
     if settings['require_client_id']:
-        print 'Error: Invalid video or client ID'
+        print('Error: Invalid video or client ID')
     else:
-        print 'Error: Invalid video ID'
+        print('Error: Invalid video ID')
     sys.exit(1)
 
 # Start and stop points
@@ -206,9 +216,9 @@ while timestamp <= stop:
             # If this is a new message, save the unique ID to prevent duplication later.
             messageIds.append(message['id'])
             date    = time.strftime('%Y-%m-%d %H:%M:%S %Z', time.gmtime(messageTimestampInSeconds))
-            sender  = message['attributes']['from'].encode('utf-8')
+            sender  = enc(message['attributes']['from'])
             color   = message['attributes']['color']
-            text    = message['attributes']['message'].encode('utf-8')
+            text    = enc(message['attributes']['message'])
 
             if color is None:
                 color = 'FFFFFF'
@@ -272,7 +282,7 @@ while timestamp <= stop:
 
             # Print messages, if not, show progress
             if settings['print']:
-                print printLine
+                print(printLine)
             else:
 
                 #Show progress %
