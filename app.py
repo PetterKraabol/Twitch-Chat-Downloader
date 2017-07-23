@@ -161,7 +161,7 @@ if settings['format'] == 'srt' or settings['format'] == 'ssa' or settings['forma
 elif settings['format'] == 'raw':
     file = open(directory + '/' + videoId + '.json', 'w')
 else:
-    file = open(directory + '/' + videoId + '.txt', 'w')
+    file = open(directory + '/' + videoId + '.txt', 'w', encoding='utf-8')
 
 # Add format line if SSA/ASS subtitle format
 if settings['format'] == 'ssa' or settings['format'] == 'ass':
