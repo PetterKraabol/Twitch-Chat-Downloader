@@ -34,5 +34,4 @@ python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 0 
 
 - A client ID is currently not required by Twitch. If they eventually decides to require a client ID, `require_client_id` in `settings.json` should be set to `true`.
 - Empty messages means the user has been timed out. There's no known way to get these.
-- This script is using Twitch's undocumented ReChat API. it might break at any time.
-- Consider increasing the delay between API calls in `settings.json` to avoid a potential temporary block from Twitch for sending too many requests when downloading messages from very long streams.
+- Consider increasing the delay between api calls in `settings.json` to avoid a potential temporary block from Twitch for sending too many requests when downloading messages from very long streams.

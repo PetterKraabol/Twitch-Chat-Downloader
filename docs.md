@@ -32,7 +32,7 @@ python app.py -v 125936523 --start 15 --stop 120 --format relative --cooldown 1
 | `-p` `--print` | Print messages |
 | `-o` `--output` | Output folder name |
 | `-f` `--format` | Message format |
-| `--cooldown` | Cooldown time between API requests in seconds |
+| `--cooldown` | Cooldown time between api requests in seconds |
 | `--start` | Start time in seconds from video start |
 | `--stop` | Stop time in seconds from video start |
 | `--subtitle-duration` | If using a subtitle format, subtitle duration in seconds |

@@ -1,0 +1,8 @@
+{
+    "version": "2.0.0",
+    "client_id": null,
+    "twitch_api": "https://api.twitch.tv/v5/{path}",
+    "formats": {
+        "irc": "[{created_at}] <{commenter[display_name]}> {message[body]}"
+    }
+}
