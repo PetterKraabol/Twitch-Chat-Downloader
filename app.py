@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-import cli
+import app
 import twitch
-import formatter
+import formats
 
 
 def main():
-    video: twitch.Video = twitch.Video(cli.arguments.video)
+    video: twitch.Video = twitch.Video(app.arguments.video)
 
     for comment in video.comments:
-        print(formatter.use(cli.arguments.format, comment))
+        print(formats.use(app.arguments.format, comment))
 
 
 if __name__ == "__main__":

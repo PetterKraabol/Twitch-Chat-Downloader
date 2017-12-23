@@ -1,18 +1,15 @@
+import app.config
 import requests
 import logging
-import config
 
 
 def get(path: str, params: dict = None, headers: dict = None) -> requests.Response:
-    if params is None:
-        params = {}
+    params = {} if headers is None else params
+    headers = {} if headers is None else headers
 
-    if headers is None:
-        headers = {}
+    params['client_id'] = app.config.settings['client_id']
 
-    params['client_id'] = config.settings['client_id']
-
-    response: requests.Response = requests.get(url=str(config.settings['twitch_api']).format(path=path),
+    response: requests.Response = requests.get(url=str(app.config.settings['twitch_api']).format(path=path),
                                                params=params,
                                                headers=headers)
     if response.status_code != requests.codes.ok:

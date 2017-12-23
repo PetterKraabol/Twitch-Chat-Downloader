@@ -3,6 +3,9 @@
     "client_id": null,
     "twitch_api": "https://api.twitch.tv/v5/{path}",
     "formats": {
-        "irc": "[{created_at}] <{commenter[display_name]}> {message[body]}"
+        "irc": {
+            "format": "[{created_at}] <{commenter[display_name]}> {message[body]}",
+            "timestamp": "%X"
+        }
     }
 }

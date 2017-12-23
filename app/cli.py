@@ -1,7 +1,7 @@
 import argparse
-import config
+import app.config
 
-format_types = config.settings['formats']
+format_types = app.config.settings['formats']
 
 parser: argparse.ArgumentParser = argparse.ArgumentParser(description='Twitch Chat Downloader')
 parser.add_argument('-v', '--video', type=str, help='Video id', default='211636961')
@@ -22,10 +22,10 @@ if arguments.video is None:
     arguments.video = answer.strip('v')
 
 # Twitch client ID
-if not config.settings['client_id'] and arguments.client_id is None:
+if not app.config.settings['client_id'] and arguments.client_id is None:
     print('Twitch requires a client ID to use their API.'
           '\nRegister an application on https://dev.twitch.tv/dashboard to get yours.')
-    config.settings['client_id'] = input('Client ID: ')
+    app.config.settings['client_id'] = input('Client ID: ')
     answer: str = input('Save client ID? (Y/n): ')
     if answer.lower() != "n":
-        config.save(config.SETTINGS_FILE, config.settings)
+        app.config.save(app.config.SETTINGS_FILE, app.config.settings)
