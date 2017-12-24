@@ -4,7 +4,7 @@ import app.config
 format_types = app.config.settings['formats']
 
 parser: argparse.ArgumentParser = argparse.ArgumentParser(description='Twitch Chat Downloader')
-parser.add_argument('-v', '--video', type=str, help='Video id', default='211636961')
+parser.add_argument('-v', '--video', type=str, help='Video id')
 parser.add_argument('--client_id', type=str, help='Twitch client id', default=None)
 # parser.add_argument('--verbose', action='store_true')
 # parser.add_argument('-q', '--quiet', action='store_true')

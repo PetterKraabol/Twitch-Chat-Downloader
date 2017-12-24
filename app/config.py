@@ -35,7 +35,7 @@ def load(filename: str) -> dict:
 
 def save(filename: str, data: dict):
     with open(filename, 'w') as file:
-        json.dump(data, file)
+        json.dump(data, file, indent=4, sort_keys=True)
 
 
 settings: dict = load('settings.json')

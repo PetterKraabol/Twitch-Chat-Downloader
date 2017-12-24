@@ -1,0 +1,141 @@
+{
+    "title": "Sewb Sewnday - @LIRIK",
+    "description": null,
+    "description_html": null,
+    "broadcast_id": 27067045776,
+    "broadcast_type": "archive",
+    "status": "recording",
+    "tag_list": "",
+    "views": 956,
+    "url": "https://www.twitch.tv/videos/212237951",
+    "language": "en",
+    "created_at": "2017-12-24T17:05:27Z",
+    "viewable": "public",
+    "viewable_at": null,
+    "published_at": "2017-12-24T17:05:27Z",
+    "_id": "v212237951",
+    "recorded_at": "2017-12-24T17:05:27Z",
+    "game": "Talk Shows",
+    "communities": [],
+    "length": 18625,
+    "preview": {
+        "small": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb0-80x45.jpg",
+        "medium": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb0-320x180.jpg",
+        "large": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb0-640x360.jpg",
+        "template": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb0-{width}x{height}.jpg"
+    },
+    "animated_preview_url": "https://vod-storyboards.twitch.tv/08ea480697dfcc025834_lirik_27067045776_760360531/storyboards/212237951-strip-0.jpg",
+    "thumbnails": {
+        "small": [
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb0-80x45.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb1-80x45.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb2-80x45.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb3-80x45.jpg"
+            }
+        ],
+        "medium": [
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb0-320x180.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb1-320x180.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb2-320x180.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb3-320x180.jpg"
+            }
+        ],
+        "large": [
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb0-640x360.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb1-640x360.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb2-640x360.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb3-640x360.jpg"
+            }
+        ],
+        "template": [
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb0-{width}x{height}.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb1-{width}x{height}.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb2-{width}x{height}.jpg"
+            },
+            {
+                "type": "generated",
+                "url": "https://static-cdn.jtvnw.net/s3_vods/08ea480697dfcc025834_lirik_27067045776_760360531/thumb/thumb3-{width}x{height}.jpg"
+            }
+        ]
+    },
+    "fps": {
+        "160p30": 0,
+        "360p30": 0,
+        "480p30": 0,
+        "720p30": 0,
+        "720p60": 0,
+        "audio_only": 0,
+        "chunked": 0
+    },
+    "resolutions": {
+        "160p30": "284x160",
+        "360p30": "640x360",
+        "480p30": "852x480",
+        "720p30": "1280x720",
+        "720p60": "1280x720",
+        "chunked": "1600x900"
+    },
+    "channel": {
+        "mature": false,
+        "status": "Sewb Sewnday HOLIDAY EDITION (literally the same but just holiday edition) - @LIRIK",
+        "broadcaster_language": "en",
+        "display_name": "LIRIK",
+        "game": "Resident Evil 7 biohazard",
+        "language": "en",
+        "_id": 23161357,
+        "name": "lirik",
+        "created_at": "2011-06-27T18:34:45.119555Z",
+        "updated_at": "2017-12-24T22:05:11.174529Z",
+        "partner": true,
+        "logo": "https://static-cdn.jtvnw.net/jtv_user_pictures/lirik-profile_image-476e7a592cdfed74-300x300.png",
+        "video_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/lirik-channel_offline_image-af3bc6ef396c76ae-1920x1080.png",
+        "profile_banner": "https://static-cdn.jtvnw.net/jtv_user_pictures/lirik-profile_banner-cd63be39a747b629-480.png",
+        "profile_banner_background_color": "#221f1f",
+        "url": "https://www.twitch.tv/lirik",
+        "views": 217051460,
+        "followers": 1961410,
+        "broadcaster_type": "partner",
+        "description": "Your source for a good time, hilarity, and gaming!"
+    }
+}

@@ -6,7 +6,7 @@ from itertools import chain
 
 
 def use(video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
-    output = formatter.output(app.settings['formats']['srt']['output'], video)
+    output = formatter.format_output(app.settings['formats']['srt']['output'], video)
 
     return generator(subtitles(video.comments)), output
 
