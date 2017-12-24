@@ -1,6 +1,7 @@
 import app.config
 import requests
 import logging
+from typing import Generator
 
 
 def get(path: str, params: dict = None, headers: dict = None) -> requests.Response:
@@ -25,7 +26,7 @@ def comment_fragment(video_id: str, cursor: str = '') -> dict:
     return get('videos/{}/comments'.format(video_id), {'cursor': cursor}).json()
 
 
-def comments(video_id: str) -> dict:
+def comments(video_id: str) -> Generator[dict, None, None]:
     fragment: dict = {'_next': ''}
 
     while '_next' in fragment:
