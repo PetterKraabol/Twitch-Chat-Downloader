@@ -4,9 +4,8 @@ import logging
 
 
 def get(path: str, params: dict = None, headers: dict = None) -> requests.Response:
-    params = {} if headers is None else params
+    params = {} if params is None else params
     headers = {} if headers is None else headers
-
     params['client_id'] = app.config.settings['client_id']
 
     response: requests.Response = requests.get(url=str(app.config.settings['twitch_api']).format(path=path),

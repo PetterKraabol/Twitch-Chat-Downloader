@@ -4,8 +4,28 @@
     "twitch_api": "https://api.twitch.tv/v5/{path}",
     "formats": {
         "irc": {
-            "format": "[{created_at}] <{commenter[display_name]}> {message[body]}",
-            "timestamp": "%X"
+            "comments": {
+                "format": "[{created_at}] <{commenter[display_name]}> {message[body]}",
+                "timestamp": "%X"
+            },
+            "output": {
+                "format": "{channel[name]}/{_id} - {title}.txt",
+                "timestamp": "%x"
+            }
+        },
+        "srt": {
+            "duration": 2
+        },
+        "ssa": {
+            "duration": 2,
+            "event": {
+                "variables": "Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+                "values": "Dialogue: Marked=0, {subtitle[start]}, {subtitle[end]}, Default, {commenter[display_name]}, 0000, 0000, 0000, , {commenter[display_name]}: {message[body]}"
+            },
+            "style:": {
+                "variables": "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, TertiaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, AlphaLevel, Encoding",
+                "values": "Style: Default,Arial,20,16777215,16777215,16777215,-2147483640,-1,0,1,3,0,1,5,0,5,0,0"
+            }
         }
     }
 }

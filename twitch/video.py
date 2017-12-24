@@ -4,7 +4,7 @@ import twitch.api
 class Video:
 
     def __init__(self, video_id: str):
-        self.metadata = twitch.api.video(video_id)
+        self.metadata: dict = twitch.api.video(video_id)
         self.comments = twitch.api.comments(video_id)
 
     def __str__(self):
