@@ -4,13 +4,14 @@ Chat messages can be downloaded as subtitles and other custom formats.
 
 | Formats           | Description                                         |
 | ----------------- | --------------------------------------------------- |
+| `default`         | Custom format example                               |
 | `irc`             | IRC chat format                                     |
 | `srt` `ssa` `ass` | Subtitle formats                                    |
 | `json`            | JSON array of comments directly form the Twitch API |
 
 ## Custom Formats
 
-To add your own custom format, simply add a new format in `settings.json`, within `formats: {...}`. You may look at an existing custom format, `irc`, and modify it to your needs. Variables are based on JSON responses form the Twitch API, transformed into a python dictionary. Comments use values from comment data, whereas output variables uses video data.
+To add your own custom format, simply add a new format in `settings.json`, within `formats: {...}`. You may look at an existing custom format, `default`, and modify it to your needs. Variables are based on JSON responses form the Twitch API, transformed into a python dictionary. Comments use values from comment data, whereas output variables uses video data.
 
 JSON response examples are found in example files within `docs/examples`. Examples to extract these values using format variables are shown below.
 

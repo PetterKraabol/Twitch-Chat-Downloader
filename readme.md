@@ -33,9 +33,10 @@ python app.py -v 125936523 --format irc --output ~/Downloads
 
 This script has been rewritten for compatibility with the Twitch API and improve performance for long VODs. Some features are yet to be reimplemented.
 
-| Formats              | Status      |
-| -------------------- | ----------- |
-| IRC + custom formats | Done        |
-| JSON                 | In progress |
-| SRT subtitles        | In progress |
-| SSA/ASS subtitles    | In progress |
+| Formats           | Status      |
+| ----------------- | ----------- |
+| Custom formats    | Done        |
+| IRC               | In progress |
+| JSON              | In progress |
+| SRT subtitles     | In progress |
+| SSA/ASS subtitles | In progress |
