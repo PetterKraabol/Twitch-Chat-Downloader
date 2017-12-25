@@ -1,7 +1,7 @@
 import app
 import twitch
-from formats import timestamp, irc, srt, ssa
-from typing import Tuple, Generator
+from formats import timestamp, irc, srt, ssa, json as _json
+from typing import Tuple, Generator, Union
 
 
 class Error(Exception):
@@ -14,15 +14,20 @@ class FormatNameError(Error):
         self.message = message
 
 
-def use(format_name: str, video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
+def use(format_name: str, video: twitch.Video) -> Tuple[Generator[Union[str, dict], None, None], str]:
     if format_name not in app.config.settings['formats']:
         raise FormatNameError('Unknown format: {}'.format(format_name))
 
-    return {
-        'srt': srt.use(video),
-        'ssa': ssa.use(video),
-        'irc': irc.use(video),
-    }.get(format_name, custom_format(app.config.settings['formats'][format_name], video))
+    if format_name == 'irc':
+        return irc.use(video)
+    if format_name == 'json':
+        return _json.use(video)
+    if format_name == 'srt':
+        return srt.use(video)
+    if format_name == 'ssa':
+        return ssa.use(video)
+    else:
+        return custom_format(app.config.settings['formats'][format_name], video)
 
 
 def custom_format(type_format: dict, video: twitch.Video) -> Tuple[Generator[str, None, None], str]:

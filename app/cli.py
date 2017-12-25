@@ -16,6 +16,9 @@ parser.add_argument('-f', '--format', type=str, help='Message format', default='
 
 arguments = parser.parse_args()
 
+# Fix format
+arguments.format = str(arguments.format).lower()
+
 # Video ID
 if arguments.video is None:
     answer: str = input('Video ID: ')

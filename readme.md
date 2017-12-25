@@ -37,6 +37,6 @@ This script has been rewritten for compatibility with the Twitch API and improve
 | ----------------- | ----------- |
 | Custom formats    | Done        |
 | IRC               | Done        |
-| JSON              | In progress |
+| JSON              | Done        |
 | SRT subtitles     | In progress |
 | SSA/ASS subtitles | In progress |

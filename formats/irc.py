@@ -32,10 +32,3 @@ def messages(comments: Generator[dict, None, None]) -> Generator[str, None, None
             yield app.settings['formats']['irc']['comments']['action_format'].format(**comment)
         else:
             yield app.settings['formats']['irc']['comments']['format'].format(**comment)
-
-
-def comment_badges(comment: dict) -> Union[List[dict], None]:
-    if 'user_badges' in comment['message']:
-        return comment['message']['user_badges']
-    else:
-        return None

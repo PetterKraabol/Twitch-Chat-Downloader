@@ -2,12 +2,12 @@
 
 Chat messages can be downloaded as subtitles and other custom formats.
 
-| Formats           | Description                                         |
-| ----------------- | --------------------------------------------------- |
-| `default`         | Custom format example                               |
-| `irc`             | IRC chat format                                     |
-| `srt` `ssa` `ass` | Subtitle formats                                    |
-| `json`            | JSON array of comments directly form the Twitch API |
+| Formats           | Description                             |
+| ----------------- | --------------------------------------- |
+| `default`         | Custom format example                   |
+| `irc`             | IRC chat format                         |
+| `srt` `ssa` `ass` | Subtitle formats                        |
+| `json`            | Raw JSON data of video and and messages |
 
 ## Custom Formats
 
