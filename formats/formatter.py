@@ -1,6 +1,6 @@
 import app
 import twitch
-from formats import timestamp, srt, ssa
+from formats import timestamp, irc, srt, ssa
 from typing import Tuple, Generator
 
 
@@ -21,7 +21,7 @@ def use(format_name: str, video: twitch.Video) -> Tuple[Generator[str, None, Non
     return {
         'srt': srt.use(video),
         'ssa': ssa.use(video),
-        'irc': ssa.use(video),
+        'irc': irc.use(video),
     }.get(format_name, custom_format(app.config.settings['formats'][format_name], video))
 
 

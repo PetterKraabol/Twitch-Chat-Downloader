@@ -10,6 +10,8 @@ def download(video_id: str, format_name: str) -> str:
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+    # print(output)
+
     with open(output, 'w+', encoding='utf-8') as file:
         for line in lines:
             print(line)

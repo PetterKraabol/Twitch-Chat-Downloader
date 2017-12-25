@@ -1,11 +1,6 @@
 {
     "client_id": null,
     "formats": {
-        "json": {
-            "output": {
-                "format": "{channel[name]}/{_id}.json"
-            }
-        },
         "default": {
             "comments": {
                 "format": "[{created_at}] <{commenter[display_name]}> {message[body]}",
@@ -18,10 +13,17 @@
         },
         "irc": {
             "comments": {
+                "action_format": "[{created_at}] *{commenter[display_name]} {message[body]}]",
+                "format": "[{created_at}] <{commenter[badge]}{commenter[display_name]}> {message[body]}",
                 "timestamp": "%X"
             },
             "output": {
                 "format": "{channel[name]}/{_id}.log"
+            }
+        },
+        "json": {
+            "output": {
+                "format": "{channel[name]}/{_id}.json"
             }
         },
         "srt": {
@@ -48,5 +50,5 @@
         }
     },
     "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.0"
+    "version": "2.0.1"
 }

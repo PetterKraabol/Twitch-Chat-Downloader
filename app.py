@@ -4,7 +4,7 @@ import app
 
 def main():
 
-    if str(app.arguments.format).lower() in ['srt', 'ssa', 'ass', 'irc']:
+    if str(app.arguments.format).lower() in ['srt', 'ssa', 'ass']:
         print('\n{format_name} is not yet implemented.'.format(format_name=str(app.arguments.format).lower()))
         print('Stay updated on https://github.com/PetterKraabol/Twitch-Chat-Downloader')
         exit()

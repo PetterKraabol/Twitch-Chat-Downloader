@@ -1,16 +1,13 @@
 import json
 import shutil
-import logging
 from pathlib import Path
 
-# Default example file
 SETTINGS_EXAMPLE_FILE: str = 'settings.example.json'
 SETTINGS_FILE: str = 'settings.json'
 
 
 def read(filename: str) -> dict:
     with open(filename, 'r', encoding='utf-8') as file:
-        logging.info('Loading configurations form ' + filename)
         return json.load(file)
 
 
@@ -23,12 +20,19 @@ def load(filename: str) -> dict:
     config_example: dict = read(SETTINGS_EXAMPLE_FILE)
     config: dict = read(filename)
 
-    # Config versioning
-    if config['version'][0] != config_example['version'][0]:
-        logging.warning('Your settings file is deprecated. Using newest: v' + config_example['version'])
-        return config_example
-    elif config['version'] != config_example['version']:
-        logging.warning('Please update your settings file to v' + config_example['version'])
+    # Config versioning and updating
+    if config['version'] != config_example['version']:
+        print('Your settings file is outdated ({}). Please update to {}'.format(config['version'],
+                                                                                config_example['version']))
+
+        answer = input('Update to new version? Existing settings will be backed up. (y/N): ')
+        if answer.lower() == 'y':
+            save('settings.{}.backup.json'.format(config['version']), config)
+            config_example['client_id'] = config['client_id']
+            save(SETTINGS_FILE, config_example)
+            return config_example
+        else:
+            exit(1)
 
     return config
 

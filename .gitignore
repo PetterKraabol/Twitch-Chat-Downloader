@@ -3,6 +3,7 @@ chats/
 settings.json
 .gtm/
 output/
+*.backup.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

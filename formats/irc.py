@@ -1,24 +1,41 @@
 import app
 import twitch
-from formats import formatter
-from typing import Tuple, Generator
-from itertools import chain
+from formats import formatter, timestamp
+from typing import Tuple, Generator, Union, List
 
 
 def use(video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
-    output = formatter.format_output(app.settings['formats']['srt']['output'], video)
-
+    output = formatter.format_output(app.settings['formats']['irc']['output'], video)
     return messages(video.comments), output
 
 
 def messages(comments: Generator[dict, None, None]) -> Generator[str, None, None]:
     for comment in comments:
-        badges = comment_badges(comment)
-        print(badges)
-        yield 'todo: irc'
-        #yield app.settings['formats']['irc']['comments'].format(comment)
+
+        # Timestamp
+        comment['created_at'] = timestamp.use('%X', comment['created_at'])
+
+        # Badges
+        if 'user_badges' not in comment['message']:
+            comment['message']['user_badges'] = [{'_id': '', 'version': 1}]
+
+        comment['commenter']['badge'] = {
+            'subscriber': '+',
+            'moderator': '@',
+            'global_mod': '%',
+            'admin': '&',
+            'staff': '!',
+            'broadcaster': '~',
+        }.get(comment['message']['user_badges'][0]['_id'], '')
+
+        if comment['message']['is_action']:
+            yield app.settings['formats']['irc']['comments']['action_format'].format(**comment)
+        else:
+            yield app.settings['formats']['irc']['comments']['format'].format(**comment)
 
 
-def comment_badges(comment: dict) -> str:
+def comment_badges(comment: dict) -> Union[List[dict], None]:
     if 'user_badges' in comment['message']:
         return comment['message']['user_badges']
+    else:
+        return None

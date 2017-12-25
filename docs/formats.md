@@ -21,7 +21,7 @@ Timestamp format is based on Python's [datetime format codes](https://docs.pytho
 
 #### Variables
 
-Variable `{commenter[display_name]}` will output _Zarlach_, given this JSON response:
+Variable `{commenter[display_name]}` will output _Zarlach_, given this JSON data:
 
 ```JSON
 {
@@ -58,4 +58,4 @@ Choosing where the output directory is placed is done with the `--output` argume
 
 ### Special Formats
 
-`SRT` and `SSA/ASS` are special formats that require scripting for proper formatting. If you want to make your own special format, you may look at how these are made within the `formats` folder.
+Formats such as `irc`, `srt` and `ssa/ass` are special formats that require scripting for proper formatting. If you want to make your own special format, you may look at how these are made within the `formats` folder.
