@@ -3,7 +3,14 @@ import app
 
 
 def main():
-    app.download(app.arguments.video, app.arguments.format)
+
+    if str(app.arguments.format).lower() in ['srt', 'ssa', 'ass', 'irc']:
+        print('\n{format_name} is not yet implemented.'.format(format_name=str(app.arguments.format).lower()))
+        print('Stay updated on https://github.com/PetterKraabol/Twitch-Chat-Downloader')
+        exit()
+
+    else:
+        app.download(app.arguments.video, app.arguments.format)
 
 
 if __name__ == "__main__":

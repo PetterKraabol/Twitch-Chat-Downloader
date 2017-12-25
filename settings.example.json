@@ -6,14 +6,22 @@
                 "format": "{channel[name]}/{_id}.json"
             }
         },
-        "irc": {
+        "default": {
             "comments": {
                 "format": "[{created_at}] <{commenter[display_name]}> {message[body]}",
                 "timestamp": "%X"
             },
             "output": {
-                "format": "{channel[name]}/{_id}.log",
+                "format": "{channel[name]}/{_id}.txt",
                 "timestamp": "%x"
+            }
+        },
+        "irc": {
+            "comments": {
+                "timestamp": "%X"
+            },
+            "output": {
+                "format": "{channel[name]}/{_id}.log"
             }
         },
         "srt": {

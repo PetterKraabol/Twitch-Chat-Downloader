@@ -13,7 +13,7 @@ def use(video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
 
 def subtitles(comments: Generator[dict, None, None]) -> Generator[str, None, None]:
     for comment in comments:
-        yield app.settings['formats']['srt']['comments'].format(comment)
+       yield app.settings['formats']['srt']['comments'].format(comment)
 
 
 def generator(lines: Generator[str, None, None]) -> Generator[str, None, None]:
