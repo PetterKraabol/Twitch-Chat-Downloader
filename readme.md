@@ -41,6 +41,6 @@ This script has been rewritten for compatibility with the Twitch API and improve
 | SRT subtitles     | Done        |
 | SSA/ASS subtitles | In progress |
 
---
+---
 
 [Wiki](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki)
