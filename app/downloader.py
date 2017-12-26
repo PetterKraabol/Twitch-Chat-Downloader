@@ -2,11 +2,10 @@ import twitch
 import formats
 import os
 import json
-from typing import Generator
+import app.cli
 
 
 def download(video_id: str, format_name: str) -> str:
-
     lines, output = formats.use(format_name, twitch.Video(video_id))
 
     # Create directory
@@ -19,7 +18,8 @@ def download(video_id: str, format_name: str) -> str:
             if format_name == 'json':
                 json.dump(line, file, indent=4, sort_keys=True)
             else:
-                print(line)
+                if not app.cli.arguments.quiet:
+                    print(line)
                 file.write('{}\n'.format(line))
 
     print('\nDownload complete! Output has been saved to {output}'.format(output=output))

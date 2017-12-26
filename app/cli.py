@@ -7,7 +7,7 @@ parser: argparse.ArgumentParser = argparse.ArgumentParser(description='Twitch Ch
 parser.add_argument('-v', '--video', type=str, help='Video id')
 parser.add_argument('--client_id', type=str, help='Twitch client id', default=None)
 # parser.add_argument('--verbose', action='store_true')
-# parser.add_argument('-q', '--quiet', action='store_true')
+parser.add_argument('-q', '--quiet', action='store_true')
 parser.add_argument('-o', '--output', type=str, help='Output folder', default='./output')
 parser.add_argument('-f', '--format', type=str, help='Message format', default='default')
 # parser.add_argument('--start', type=int, help='Start time in seconds from video start')
