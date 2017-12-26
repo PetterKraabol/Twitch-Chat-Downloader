@@ -11,6 +11,16 @@
                 "timestamp": "%x"
             }
         },
+        "kappa": {
+            "comments": {
+                "format": "{created_at} {commenter[display_name]} Kappa",
+                "timestamp": "%x %X"
+            },
+            "output": {
+                "format": "{channel[display_name]}/{_id}.txt",
+                "timestamp": "%x"
+            }
+        },
         "irc": {
             "comments": {
                 "action_format": "[{created_at}] *{commenter[display_name]} {message[body]}]",
@@ -27,14 +37,17 @@
             }
         },
         "srt": {
-            "duration": 2,
+            "duration": 2000,
+            "comments": {
+                "format": "{commenter[display_name]}: {message[body]}"
+            },
             "output": {
                 "format": "{channel[name]}/{_id}.srt",
                 "timestamp": "%x"
             }
         },
         "ssa": {
-            "duration": 2,
+            "duration": 2000,
             "event": {
                 "values": "Dialogue: Marked=0, {subtitle[start]}, {subtitle[end]}, Default, {commenter[display_name]}, 0000, 0000, 0000, , {commenter[display_name]}: {message[body]}",
                 "variables": "Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
@@ -50,5 +63,5 @@
         }
     },
     "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.1"
+    "version": "2.0.2"
 }

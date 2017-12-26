@@ -38,5 +38,9 @@ This script has been rewritten for compatibility with the Twitch API and improve
 | Custom formats    | Done        |
 | IRC               | Done        |
 | JSON              | Done        |
-| SRT subtitles     | In progress |
+| SRT subtitles     | Done        |
 | SSA/ASS subtitles | In progress |
+
+--
+
+[Wiki](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki)

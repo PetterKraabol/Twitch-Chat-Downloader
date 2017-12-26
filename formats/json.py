@@ -3,11 +3,13 @@ import twitch
 from formats import formatter
 from typing import Tuple, Generator, List, Union
 
+FORMAT: dict = app.settings['formats']['json']
+
 
 def use(video: twitch.Video) -> Tuple[Generator[dict, None, None], str]:
     print('Downloading JSON data...')
 
-    output = formatter.format_output(app.settings['formats']['json']['output'], video)
+    output = formatter.format_output(FORMAT['output'], video)
 
     json_object = dict()
     json_object['video']: dict = video.metadata
