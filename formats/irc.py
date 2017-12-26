@@ -3,9 +3,11 @@ import twitch
 from formats import formatter, timestamp
 from typing import Tuple, Generator, Union, List
 
+FORMAT: dict = app.settings['formats']['irc']
+
 
 def use(video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
-    output = formatter.format_output(app.settings['formats']['irc']['output'], video)
+    output = formatter.format_output(FORMAT['output'], video)
     return messages(video.comments), output
 
 
@@ -13,7 +15,7 @@ def messages(comments: Generator[dict, None, None]) -> Generator[str, None, None
     for comment in comments:
 
         # Timestamp
-        comment['created_at'] = timestamp.use('%X', comment['created_at'])
+        comment['created_at'] = timestamp.use(FORMAT['comments']['timestamp'], comment['created_at'])
 
         # Badges
         if 'user_badges' not in comment['message']:
@@ -29,6 +31,6 @@ def messages(comments: Generator[dict, None, None]) -> Generator[str, None, None
         }.get(comment['message']['user_badges'][0]['_id'], '')
 
         if comment['message']['is_action']:
-            yield app.settings['formats']['irc']['comments']['action_format'].format(**comment)
+            yield FORMAT['comments']['action_format'].format(**comment)
         else:
-            yield app.settings['formats']['irc']['comments']['format'].format(**comment)
+            yield FORMAT['comments']['format'].format(**comment)
