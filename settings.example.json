@@ -11,16 +11,6 @@
                 "timestamp": "%x"
             }
         },
-        "kappa": {
-            "comments": {
-                "format": "{created_at} {commenter[display_name]} Kappa",
-                "timestamp": "%x %X"
-            },
-            "output": {
-                "format": "{channel[display_name]}/{_id}.txt",
-                "timestamp": "%x"
-            }
-        },
         "irc": {
             "comments": {
                 "action_format": "[{created_at}] *{commenter[display_name]} {message[body]}]",
