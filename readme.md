@@ -29,18 +29,12 @@ python app.py --help
 python app.py -v 125936523 --format irc --output ~/Downloads
 ```
 
-### Status
-
-This script has been rewritten for compatibility with the Twitch API and improve performance for long VODs. Some features are yet to be reimplemented.
-
-| Formats           | Status      |
-| ----------------- | ----------- |
-| Custom formats    | Done        |
-| IRC               | Done        |
-| JSON              | Done        |
-| SRT subtitles     | Done        |
-| SSA/ASS subtitles | In progress |
+### Features
+- Create your own [custom formats](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki/Custom-formats)
+- IRC format with badges
+- SRT and SSA [subtitle formats](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki/Formats)
+- Raw JSON data from the Twitch API
 
 ---
 
-[Wiki](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki)
+[Check out the Wiki](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki)

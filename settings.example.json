@@ -43,20 +43,25 @@
         },
         "ssa": {
             "duration": 2000,
-            "event": {
-                "values": "Dialogue: Marked=0, {subtitle[start]}, {subtitle[end]}, Default, {commenter[display_name]}, 0000, 0000, 0000, , {commenter[display_name]}: {message[body]}",
-                "variables": "Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
+            "comments": {
+                "format": "{message[body]}"
             },
             "output": {
                 "format": "{channel[name]}/{_id}.ssa",
-                "timestamp": "%x"
+                "timestamp": {
+                    "absolute": "%x"
+                }
             },
-            "style:": {
-                "values": "Style: Default,Arial,20,16777215,16777215,16777215,-2147483640,-1,0,1,3,0,1,5,0,5,0,0",
-                "variables": "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, TertiaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, AlphaLevel, Encoding"
+            "events": {
+                "format": "Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+                "dialogue": "Dialogue: Marked=0,{start},{end},Default,{name},0000,0000,0000,,{text}"
+            },
+            "styles": {
+                "format": "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
+                "values": "Default,Arial,20,65535,65535,65535,-2147483640,-1,0,1,3,0,2,30,30,30,0,0"
             }
         }
     },
     "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.3"
+    "version": "2.0.4"
 }

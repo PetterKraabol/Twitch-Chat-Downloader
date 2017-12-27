@@ -28,7 +28,15 @@ def load(filename: str) -> dict:
         answer = input('Update to new version? Existing settings will be backed up. (y/N): ')
         if answer.lower() == 'y':
             save('settings.{}.backup.json'.format(config['version']), config)
+
+            # Copy client id to new config file
             config_example['client_id'] = config['client_id']
+
+            # Copy user-defined formats to new config file
+            for format_name, format_dictionary in dict(config['formats']).items():
+                if format_name not in config_example['formats']:
+                    config_example[format_name] = format_dictionary
+
             save(SETTINGS_FILE, config_example)
             return config_example
         else:

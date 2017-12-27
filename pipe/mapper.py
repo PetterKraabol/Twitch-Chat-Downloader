@@ -27,10 +27,14 @@ def use(dictionary: dict, format_dictionary: dict):
             dictionary['timestamp']['relative'] = timestamp.relative(float(dictionary['content_offset_seconds']))
 
     # IRC badge
-    if 'commenter' in dictionary:
+    if '{commenter[irc_badge]}' in format_dictionary['format'] and 'message' in dictionary:
+
+        # Add empty badge if no badge
         if 'user_badges' not in dictionary['message']:
             dictionary['message']['user_badges'] = [{'_id': '', 'version': 1}]
 
+        # Set irc badge to first (highest) badge.
+        # The Twitch API returns an array of badges, where the most important is first.
         dictionary['commenter']['irc_badge'] = {
             'subscriber': '+',
             'moderator': '@',
