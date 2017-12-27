@@ -1,7 +1,8 @@
 import app
 import twitch
-from formats import timestamp, irc, srt, ssa, json as _json
+from pipe import timestamp
 from typing import Tuple, Generator, Union
+from formats import custom, srt, ssa, json as _json
 
 
 class Error(Exception):
@@ -15,11 +16,12 @@ class FormatNameError(Error):
 
 
 def use(format_name: str, video: twitch.Video) -> Tuple[Generator[Union[str, dict], None, None], str]:
+
+    # Check if format name exists
     if format_name not in app.config.settings['formats']:
         raise FormatNameError('Unknown format: {}'.format(format_name))
 
-    if format_name == 'irc':
-        return irc.use(video)
+    # Select format method
     if format_name == 'json':
         return _json.use(video)
     if format_name == 'srt':
@@ -27,24 +29,7 @@ def use(format_name: str, video: twitch.Video) -> Tuple[Generator[Union[str, dic
     if format_name == 'ssa':
         return ssa.use(video)
     else:
-        return custom_format(app.config.settings['formats'][format_name], video)
-
-
-def custom_format(type_format: dict, video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
-    return format_comments(type_format['comments'], video.comments), format_output(type_format['output'], video)
-
-
-def format_comments(comment_format: dict, comments: Generator[dict, None, None]) -> Generator[str, None, None]:
-    for comment in comments:
-
-        if 'timestamp' in comment_format:
-            comment['created_at'] = timestamp.use(comment_format['timestamp'], comment['created_at'])
-
-        yield format_comment(comment_format, comment)
-
-
-def format_comment(comment_format: dict, comment: dict) -> str:
-    return comment_format['format'].format(**comment)
+        return custom.use(app.config.settings['formats'][format_name], video)
 
 
 def format_output(output_format: dict, video: twitch.Video) -> str:

@@ -1,12 +1,12 @@
 import app
 import twitch
-from formats import formatter
-from typing import Tuple, Generator
 from itertools import chain
+from formats import formats
+from typing import Tuple, Generator
 
 
 def use(video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
-    output = formatter.format_output(app.settings['formats']['ssa']['output'], video)
+    output = formats.format_output(app.settings['formats']['ssa']['output'], video)
 
     return generator(subtitles(video.comments)), output
 

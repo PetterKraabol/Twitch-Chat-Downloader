@@ -1,14 +1,15 @@
 import app
+import pipe
 import twitch
 import datetime
-from formats import formatter, timestamp
+from formats import formats
 from typing import Tuple, Generator
 
 FORMAT: dict = app.settings['formats']['srt']
 
 
 def use(video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
-    output = formatter.format_output(FORMAT['output'], video)
+    output = formats.format_output(FORMAT['output'], video)
     return subtitles(video), output
 
 
@@ -20,4 +21,4 @@ def subtitles(video: twitch.Video) -> Generator[str, None, None]:
         yield '{index}\n{start} --> {stop}\n{message}\n'.format(index=index + 1,
                                                                 start=str(start).replace('.', ',')[:-3],
                                                                 stop=str(stop).replace('.', ',')[:-3],
-                                                                message=FORMAT['comments']['format'].format(**comment))
+                                                                message=pipe.comment(comment, FORMAT['comments']))
