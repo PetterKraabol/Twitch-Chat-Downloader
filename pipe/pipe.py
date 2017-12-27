@@ -1,5 +1,5 @@
 import app
-from pipe import mapper, reducer
+from pipe import mapper, reducer, filter
 
 
 # Formatting pipes
@@ -11,6 +11,7 @@ def comment(comment_input: dict, comment_format: dict) -> str:
 
 
 def output(video_metadata: dict, output_format: dict) -> str:
+    filter.output(video_metadata, output_format)
     mapper.use(video_metadata, output_format)
 
     return '{}/{}'.format(app.arguments.output.rstrip('/').rstrip('\\'), reducer.use(video_metadata, output_format))
