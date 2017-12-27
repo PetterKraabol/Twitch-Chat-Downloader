@@ -13,6 +13,7 @@ parser.add_argument('-f', '--format', type=str, help='Message format', default='
 # parser.add_argument('--start', type=int, help='Start time in seconds from video start')
 # parser.add_argument('--stop', type=int, help='Stop time in seconds from video start')
 # parser.add_argument('--subtitle-duration', type=int, help='If using a subtitle format, subtitle duration in seconds')
+parser.add_argument('--timezone', type=str, help='Timezone name', default=None)
 
 arguments = parser.parse_args()
 

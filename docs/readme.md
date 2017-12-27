@@ -14,12 +14,17 @@ Settings for Twitch Chat Downloader is found in `settings.json`, a file generate
 | `-v` `--video`  | Video ID                              |
 | `--client-id`   | Twitch client ID                      |
 | `-o` `--output` | Output directory. Default: `./output` |
-| `-f` `--format` | Output format. Default: `default`         |
+| `-f` `--format` | Output format. Default: `default`     |
 | `-q` `--quiet`  | Suppress console output               |
+| `--timezone`    | Timezone name                         |
+
+All arguments are optional.
 
 Note that `--output` does not override the format's output directory, but simply prepends its value to the format's directory.
 
 It is not necessary to specify `--client-id` if it has been set in the settings file.
+
+For `--timezone`, see this [Stack Overflow answer](https://stackoverflow.com/a/13867319) to get a list of timezones.
 
 ### Formats
 

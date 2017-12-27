@@ -3,19 +3,25 @@
     "formats": {
         "default": {
             "comments": {
-                "format": "[{created_at}] <{commenter[display_name]}> {message[body]}",
-                "timestamp": "%X"
+                "format": "[{timestamp[relative]}] <{commenter[display_name]}> {message[body]}",
+                "timestamp": {
+                    "relative": "%X"
+                }
             },
             "output": {
                 "format": "{channel[name]}/{_id}.txt",
-                "timestamp": "%x"
+                "timestamp": {
+                    "absolute": "%x"
+                }
             }
         },
         "irc": {
             "comments": {
-                "action_format": "[{created_at}] *{commenter[display_name]} {message[body]}]",
-                "format": "[{created_at}] <{commenter[badge]}{commenter[display_name]}> {message[body]}",
-                "timestamp": "%X"
+                "action_format": "[{timestamp[relative]}] *{commenter[display_name]} {message[body]}]",
+                "format": "[{timestamp[relative]}] <{commenter[irc_badge]}{commenter[display_name]}> {message[body]}",
+                "timestamp": {
+                    "relative": "%x"
+                }
             },
             "output": {
                 "format": "{channel[name]}/{_id}.log"
@@ -32,8 +38,7 @@
                 "format": "{commenter[display_name]}: {message[body]}"
             },
             "output": {
-                "format": "{channel[name]}/{_id}.srt",
-                "timestamp": "%x"
+                "format": "{channel[name]}/{_id}.srt"
             }
         },
         "ssa": {
@@ -53,5 +58,5 @@
         }
     },
     "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.2"
+    "version": "2.0.3"
 }
