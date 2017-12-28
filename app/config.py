@@ -1,5 +1,6 @@
 import json
 import shutil
+import app
 from pathlib import Path
 
 SETTINGS_EXAMPLE_FILE: str = 'settings.example.json'
@@ -22,32 +23,48 @@ def load(filename: str) -> dict:
 
     # Config versioning and updating
     if config['version'] != config_example['version']:
-        print('Your settings file is outdated ({}). Please update to {}'.format(config['version'],
-                                                                                config_example['version']))
-
-        answer = input('Update to new version? Existing settings will be backed up. (y/N): ')
-        if answer.lower() == 'y':
-            save('settings.{}.backup.json'.format(config['version']), config)
-
-            # Copy client id to new config file
-            config_example['client_id'] = config['client_id']
-
-            # Copy user-defined formats to new config file
-            for format_name, format_dictionary in dict(config['formats']).items():
-                if format_name not in config_example['formats']:
-                    config_example[format_name] = format_dictionary
-
-            save(SETTINGS_FILE, config_example)
-            return config_example
-        else:
-            exit(1)
+        prompt_update(config, config_example)
 
     return config
 
 
 def save(filename: str, data: dict):
+    """
+    Convert config dictionary to file and save to file.
+    :param filename: Output filename
+    :param data: Config dictionary
+    :return:
+    """
     with open(filename, 'w') as file:
         json.dump(data, file, indent=4, sort_keys=True)
+
+
+def prompt_update(current_config: dict, new_config: dict) -> dict:
+    print('Your settings file is outdated ({}). Please update to {}'.format(current_config['version'],
+                                                                            new_config['version']))
+
+    answer = input('Update to new version? Existing settings will be backed up. (y/N): ')
+    if answer.lower() == 'y':
+        return update(current_config, new_config)
+    else:
+        exit(1)
+
+
+def update(current_config: dict, new_config: dict) -> dict:
+    save('settings.{}.backup.json'.format(current_config['version']), current_config)
+
+    # Copy client id to new config file
+    new_config['client_id'] = current_config['client_id']
+
+    # Copy user-defined formats to new config file
+    for format_name, format_dictionary in dict(current_config['formats']).items():
+        if format_name not in new_config['formats']:
+            new_config[format_name] = format_dictionary
+
+    # Overwrite current config file with new config.
+    save(SETTINGS_FILE, new_config)
+
+    return new_config
 
 
 settings: dict = load('settings.json')

@@ -34,6 +34,7 @@ python app.py -v 125936523 --format irc --output ~/Downloads
 - IRC format with badges
 - SRT and SSA [subtitle formats](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki/Formats)
 - Raw JSON data from the Twitch API
+- Timezone conversion
 
 ---
 
