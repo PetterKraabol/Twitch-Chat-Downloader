@@ -30,11 +30,3 @@ def use(format_name: str, video: twitch.Video) -> Tuple[Generator[Union[str, dic
         return ssa.use(video)
     else:
         return custom.use(app.config.settings['formats'][format_name], video)
-
-
-def format_output(output_format: dict, video: twitch.Video) -> str:
-    if 'timestamp' in output_format:
-        video.metadata['created_at'] = timestamp.use(output_format['timestamp'], video.metadata['created_at'])
-
-    return '{}/{}'.format(app.arguments.output.rstrip('/').rstrip('\\'),
-                          output_format['format'].format(**video.metadata))
