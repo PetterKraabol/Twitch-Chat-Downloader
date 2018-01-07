@@ -26,7 +26,7 @@ def download(video_id: str, format_name: str) -> str:
                 json.dump(line, file, indent=4, sort_keys=True)
             else:
                 if not app.cli.arguments.quiet:
-                    if app.cli.arguments.verbose:
+                    if app.cli.arguments.preview:
                         print(line)
                     elif 'content_offset_seconds' in line_dictionary:
                         draw_progress(line_dictionary['content_offset_seconds'], video.metadata['length'])

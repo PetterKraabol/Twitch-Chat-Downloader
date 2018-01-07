@@ -16,10 +16,11 @@ def prompt_client_id():
         app.config.save(app.config.SETTINGS_FILE, app.config.settings)
 
 
-parser: argparse.ArgumentParser = argparse.ArgumentParser(description='Twitch Chat Downloader v{version}'.format(version=app.config.settings['version']))
+parser: argparse.ArgumentParser = argparse.ArgumentParser(
+    description='Twitch Chat Downloader v{version}'.format(version=app.config.settings['version']))
 parser.add_argument('-v', '--video', type=str, help='Video id')
 parser.add_argument('--client_id', type=str, help='Twitch client id', default=None)
-parser.add_argument('--verbose', action='store_true', help='Print chat lines')
+# parser.add_argument('--verbose', action='store_true')
 parser.add_argument('-q', '--quiet', action='store_true')
 parser.add_argument('-o', '--output', type=str, help='Output folder', default='./output')
 parser.add_argument('-f', '--format', type=str, help='Message format', default='default')
@@ -30,6 +31,7 @@ parser.add_argument('--init', action='store_true', help='Script setup')
 parser.add_argument('--update', action='store_true', help='Update settings')
 parser.add_argument('--version', action='store_true', help='Settings version')
 parser.add_argument('--formats', action='store_true', help='List available formats')
+parser.add_argument('--preview', action='store_true', help='Print chat lines')
 
 arguments = parser.parse_args()
 
