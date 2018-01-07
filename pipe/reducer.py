@@ -1,4 +1,7 @@
-def use(dictionary: dict, format_dictionary: dict) -> str:
+from typing import Tuple
+
+
+def use(dictionary: dict, format_dictionary: dict) -> Tuple[str, dict]:
     """
     The reducer's job is to format an input to an output based on a format dictionary.
     :param dictionary:
@@ -7,6 +10,6 @@ def use(dictionary: dict, format_dictionary: dict) -> str:
     """
     # Action format
     if 'action_format' in format_dictionary and 'is_action' in dictionary and bool(dictionary['is_action']):
-        return format_dictionary['action_format'].format(**dictionary)
+        return format_dictionary['action_format'].format(**dictionary), dictionary
 
-    return format_dictionary['format'].format(**dictionary)
+    return format_dictionary['format'].format(**dictionary), dictionary

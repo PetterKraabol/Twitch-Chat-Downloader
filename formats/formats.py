@@ -15,7 +15,7 @@ class FormatNameError(Error):
         self.message = message
 
 
-def use(format_name: str, video: twitch.Video) -> Tuple[Generator[Union[str, dict], None, None], str]:
+def use(format_name: str, video: twitch.Video) -> Tuple[Generator[Union[Tuple[str, dict], dict], None, None], str]:
 
     # Check if format name exists
     if format_name not in app.config.settings['formats']:

@@ -54,6 +54,6 @@ def use(dictionary: dict, format_dictionary: dict):
             'moderator': '@',
             'global_mod': '%',
             'admin': '&',
-            'staff': '!',
+            'staff': '§',
             'broadcaster': '~',
         }.get(dictionary['message']['user_badges'][0]['_id'], '')

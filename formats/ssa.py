@@ -8,33 +8,35 @@ from typing import Tuple, Generator, List
 ssa_format: dict = app.settings['formats']['ssa']
 
 
-def use(video: twitch.Video) -> Tuple[Generator[str, None, None], str]:
+def use(video: twitch.Video) -> Tuple[Generator[Tuple[str, dict], None, None], str]:
     output = pipe.output(video.metadata, ssa_format['output'])
 
     return generator(video), output
 
 
-def generator(video: twitch.Video) -> Generator[str, None, None]:
+def generator(video: twitch.Video) -> Generator[Tuple[str, dict], None, None]:
     for line in chain(prefix(video.metadata), dialogues(video.comments)):
         yield line
 
 
-def dialogues(comments: Generator[dict, None, None]) -> Generator[str, None, None]:
+def dialogues(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dict], None, None]:
     for comment in comments:
         start: datetime.timedelta = datetime.timedelta(seconds=comment['content_offset_seconds'], milliseconds=0.001)
         end: datetime.timedelta = start + datetime.timedelta(milliseconds=ssa_format['duration'])
+
+        text, comment_dictionary = pipe.comment(comment, ssa_format['comments'])
 
         dialogue: dict = {
             'start': str(start)[:-4],
             'end': str(end)[:-4],
             'name': comment['commenter']['display_name'],
-            'text': pipe.comment(comment, ssa_format['comments'])
+            'text': text
         }
 
-        yield ssa_format['events']['dialogue'].format(**dialogue)
+        yield ssa_format['events']['dialogue'].format(**dialogue), comment_dictionary
 
 
-def prefix(video_metadata: dict) -> Generator[str, None, None]:
+def prefix(video_metadata: dict) -> Generator[Tuple[str, dict], None, None]:
     lines: List[str] = list()
 
     # Script info
@@ -56,4 +58,4 @@ def prefix(video_metadata: dict) -> Generator[str, None, None]:
     lines.append(ssa_format['events']['format'])
 
     for line in lines:
-        yield line
+        yield line, {}
