@@ -17,9 +17,23 @@ def use(dictionary: dict, format_dictionary: dict):
 
         # Absolute timestamp
         if 'absolute' in format_dictionary['timestamp'] and '{timestamp[absolute]}' in format_dictionary['format']:
+
+            # Millisecond precision - remove $f (milliseconds) from time format
+            if 'millisecond_precision' in format_dictionary:
+                format_dictionary['timestamp']['absolute'] = str(format_dictionary['timestamp']['absolute']).replace(
+                    '%f', '_MILLISECONDS_')
+
+            # Format timestamp
             dictionary['timestamp']['absolute'] = timestamp.use(format_dictionary['timestamp']['absolute'],
                                                                 dictionary['created_at'],
                                                                 app.arguments.timezone)
+
+            # Millisecond precision - add milliseconds to timestamp
+            if 'millisecond_precision' in format_dictionary:
+                milliseconds: str = timestamp.use('%f', dictionary['created_at'], app.arguments.timezone)
+                milliseconds = milliseconds[:format_dictionary['millisecond_precision']]
+                dictionary['timestamp']['absolute'] = str(dictionary['timestamp']['absolute']).replace('_MILLISECONDS_',
+                                                                                                       milliseconds)
 
         # Relative timestamp
         if '{timestamp[relative]}' in format_dictionary['format']:
