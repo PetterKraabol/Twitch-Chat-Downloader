@@ -19,6 +19,8 @@ def get(path: str, params: dict = None, headers: dict = None) -> requests.Respon
 
 
 def video(video_id: str) -> dict:
+    if app.cli.arguments.verbose:
+        print('Downloading video metadata from Twitch API')
     return get('videos/{}'.format(video_id)).json()
 
 
@@ -27,6 +29,9 @@ def comment_fragment(video_id: str, cursor: str = '') -> dict:
 
 
 def comments(video_id: str) -> Generator[dict, None, None]:
+    if app.cli.arguments.verbose:
+        print('Downloading comments from Twitch API')
+
     fragment: dict = {'_next': ''}
 
     while '_next' in fragment:

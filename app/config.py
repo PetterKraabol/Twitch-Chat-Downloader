@@ -1,6 +1,5 @@
 import json
 import shutil
-import app
 from pathlib import Path
 
 SETTINGS_EXAMPLE_FILE: str = 'settings.example.json'
