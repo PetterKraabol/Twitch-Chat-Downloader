@@ -2,23 +2,32 @@ import argparse
 import app.config
 
 
+# Ask for video ID
 def prompt_video_id() -> str:
     answer: str = input('Video ID: ')
     return answer.strip('v')
 
 
-def prompt_client_id():
+# Ask for Twitch client ID
+def prompt_client_id(initialize: bool = False):
     print('Twitch requires a client ID to use their API.'
           '\nRegister an application on https://dev.twitch.tv/dashboard to get yours.')
     app.config.settings['client_id'] = input('Client ID: ')
-    answer: str = input('Save client ID? (Y/n): ')
-    if answer.lower() != "n":
+    if initialize:
         app.config.save(app.config.SETTINGS_FILE, app.config.settings)
+    else:
+        answer: str = input('Save client ID? (Y/n): ')
+        if not answer.lower().startswith('n'):
+            app.config.save(app.config.SETTINGS_FILE, app.config.settings)
 
 
+# Arguments
 parser: argparse.ArgumentParser = argparse.ArgumentParser(
     description='Twitch Chat Downloader v{version}'.format(version=app.config.settings['version']))
+
 parser.add_argument('-v', '--video', type=str, help='Video id')
+# parser.add_argument('-c', '--channel', type=str, help='Channel name')
+# parser.add_argument('--videos', type=int, help='Number of videos from channel')
 parser.add_argument('--client_id', type=str, help='Twitch client id')
 parser.add_argument('--verbose', action='store_true')
 parser.add_argument('-q', '--quiet', action='store_true')
@@ -36,16 +45,18 @@ parser.add_argument('--input', type=str, help='Read data from JSON file')
 
 arguments = parser.parse_args()
 
-# Fix format
+# Turn format to lowercase
 arguments.format = str(arguments.format).lower()
 
 # Initialize
 if arguments.init:
-    prompt_client_id()
+    prompt_client_id(initialize=True)
+    print('Twitch Chat Downloader has been initialized.')
     exit(1)
 
 # Update
 if arguments.update:
+    print('You are up to date with v{}'.format(app.config.settings['version']))
     exit(1)
 
 # Version

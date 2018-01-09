@@ -17,7 +17,7 @@ def use(video: twitch.Video) -> Tuple[Generator[dict, None, None], str]:
 
         # Draw progress
         if not app.arguments.quiet and not app.arguments.verbose:
-            app.draw_progress(comment['content_offset_seconds'], video.metadata['length'])
+            app.draw_progress(comment['content_offset_seconds'], video.metadata['length'], 'json')
 
         # Append to comments
         json_object['comments'].append(comment)

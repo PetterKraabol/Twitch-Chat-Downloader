@@ -22,7 +22,7 @@ def load(filename: str) -> dict:
 
     # Config versioning and updating
     if config['version'] != config_example['version']:
-        prompt_update(config, config_example)
+        return prompt_update(config, config_example)
 
     return config
 
@@ -42,11 +42,11 @@ def prompt_update(current_config: dict, new_config: dict) -> dict:
     print('Your settings file is outdated ({}). Please update to {}'.format(current_config['version'],
                                                                             new_config['version']))
 
-    answer = input('Update to new version? Existing settings will be backed up. (y/N): ')
-    if answer.lower() == 'y':
-        return update(current_config, new_config)
-    else:
+    answer = input('Update to new version? Existing settings will be backed up. (Y/n): ')
+    if answer.lower().startswith('n'):
         exit(1)
+    else:
+        return update(current_config, new_config)
 
 
 def update(current_config: dict, new_config: dict) -> dict:
