@@ -3,6 +3,7 @@ import pipe
 import twitch
 import datetime
 from itertools import chain
+from app.utils import SafeDict
 from typing import Tuple, Generator, List
 
 ssa_format: dict = app.settings['formats']['ssa']
@@ -29,11 +30,12 @@ def dialogues(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dic
         dialogue: dict = {
             'start': str(start)[:-4],
             'end': str(end)[:-4],
-            'name': comment['commenter']['display_name'],
+            'color': comment_dictionary['ssa_color'],
             'text': text
         }
+        dialogue.update(comment)
 
-        yield ssa_format['events']['dialogue'].format(**dialogue), comment_dictionary
+        yield ssa_format['events']['dialogue'].format_map(SafeDict(dialogue)), comment_dictionary
 
 
 def prefix(video_metadata: dict) -> Generator[Tuple[str, dict], None, None]:

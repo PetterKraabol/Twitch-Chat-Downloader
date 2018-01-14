@@ -23,7 +23,7 @@ def subtitles(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dic
             'index': int(index) + 1,
             'start': str(start).replace('.', ',')[:-3],
             'stop': str(stop).replace('.', ',')[:-3],
-            'text': text
+            'comment': text
         }
 
         yield '{index}\n{start} --> {stop}\n{text}\n'.format(**subtitle), comment_dictionary

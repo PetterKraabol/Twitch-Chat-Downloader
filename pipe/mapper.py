@@ -57,3 +57,6 @@ def use(dictionary: dict, format_dictionary: dict):
             'staff': '§',
             'broadcaster': '~',
         }.get(dictionary['message']['user_badges'][0]['_id'], '')
+
+    # SSA Color
+    dictionary['ssa_color'] = dictionary['message']['user_color']
