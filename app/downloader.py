@@ -11,6 +11,10 @@ def draw_progress(current: float, end: float, description: str = 'Downloading'):
     sys.stdout.flush()
 
 
+def download_multiple_formats():
+    pass
+
+
 def download(video_id: str, format_name: str) -> str:
     if app.cli.arguments.verbose:
         print('Downloading {} initialized'.format(format_name))

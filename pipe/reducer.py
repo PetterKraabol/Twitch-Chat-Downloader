@@ -1,3 +1,4 @@
+from app.utils import SafeDict
 from typing import Tuple
 
 
@@ -10,6 +11,6 @@ def use(dictionary: dict, format_dictionary: dict) -> Tuple[str, dict]:
     """
     # Action format
     if 'action_format' in format_dictionary and 'is_action' in dictionary and bool(dictionary['is_action']):
-        return format_dictionary['action_format'].format(**dictionary), dictionary
+        return format_dictionary['action_format'].format_map(SafeDict(dictionary)), dictionary
 
-    return format_dictionary['format'].format(**dictionary), dictionary
+    return format_dictionary['format'].format_map(SafeDict(dictionary)), dictionary

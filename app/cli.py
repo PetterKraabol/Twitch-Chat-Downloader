@@ -27,7 +27,7 @@ parser: argparse.ArgumentParser = argparse.ArgumentParser(
 
 parser.add_argument('-v', '--video', type=str, help='Video id')
 # parser.add_argument('-c', '--channel', type=str, help='Channel name')
-# parser.add_argument('--videos', type=int, help='Number of videos from channel')
+# parser.add_argument('--limit', type=int, help='Number of videos from channel')
 parser.add_argument('--client_id', type=str, help='Twitch client id')
 parser.add_argument('--verbose', action='store_true')
 parser.add_argument('-q', '--quiet', action='store_true')
