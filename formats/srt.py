@@ -1,4 +1,5 @@
 import app
+from app.utils import SafeDict
 import pipe
 import twitch
 import datetime
@@ -17,13 +18,13 @@ def subtitles(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dic
         start: datetime.timedelta = datetime.timedelta(seconds=comment['content_offset_seconds'], milliseconds=0.001)
         stop: datetime.timedelta = start + datetime.timedelta(milliseconds=irc_format['duration'])
 
-        text, comment_dictionary = pipe.comment(comment, irc_format['comments'])
+        message, comment_dictionary = pipe.comment(comment, irc_format['comments'])
 
         subtitle: dict = {
             'index': int(index) + 1,
             'start': str(start).replace('.', ',')[:-3],
             'stop': str(stop).replace('.', ',')[:-3],
-            'comment': text
+            'message': message
         }
 
-        yield '{index}\n{start} --> {stop}\n{text}\n'.format(**subtitle), comment_dictionary
+        yield '{index}\n{start} --> {stop}\n{message}\n'.format_map(SafeDict(subtitle)), comment_dictionary

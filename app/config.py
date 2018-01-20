@@ -58,7 +58,7 @@ def update(current_config: dict, new_config: dict) -> dict:
     # Copy user-defined formats to new config file
     for format_name, format_dictionary in dict(current_config['formats']).items():
         if format_name not in new_config['formats']:
-            new_config[format_name] = format_dictionary
+            new_config['formats'][format_name] = format_dictionary
 
     # Overwrite current config file with new config.
     save(SETTINGS_FILE, new_config)

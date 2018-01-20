@@ -33,35 +33,42 @@
             }
         },
         "srt": {
-            "duration": 2000,
             "comments": {
                 "format": "{commenter[display_name]}: {message[body]}"
             },
+            "duration": 2000,
             "output": {
                 "format": "{channel[name]}/{_id}.srt"
             }
         },
         "ssa": {
-            "duration": 2000,
             "comments": {
-                "format": "{message[body]}"
+                "format": "{\\c&{message[user_color]}&}{commenter[display_name]} {\\c&HFFFFFF&}{message[body]}"
             },
+            "default_user_color": "random",
+            "duration": 2000,
+            "events": {
+                "dialogue": "Dialogue: Marked=0,{start},{end},Default,{commenter[display_name]},0000,0000,0000,,{comment}",
+                "format": "Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
+            },
+            "fonts": "",
+            "graphics": "",
             "output": {
                 "format": "{channel[name]}/{_id}.ssa",
                 "timestamp": {
                     "absolute": "%x"
                 }
             },
-            "events": {
-                "format": "Format: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
-                "dialogue": "Dialogue: Marked=0,{start},{end},Default,{name},0000,0000,0000,,{text}"
+            "resolution": {
+                "x": 1280,
+                "y": 720
             },
             "styles": {
-                "format": "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-                "values": "Style: Default,Arial,20,65535,65535,65535,-2147483640,-1,0,1,3,0,2,30,30,30,0,0"
+                "format": "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, TertiaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, AlphaLevel, Encoding",
+                "values": "Style: Default,Arial,21,16777215,8793979,0,-2147483640,0,0,1,1.5,0,11,30,30,30,0,0"
             }
         }
     },
     "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.5"
+    "version": "2.0.6"
 }

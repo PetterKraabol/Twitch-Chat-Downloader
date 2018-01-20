@@ -1,4 +1,5 @@
 import app
+import random
 from pipe import timestamp
 
 
@@ -40,6 +41,18 @@ def use(dictionary: dict, format_dictionary: dict):
             # Todo: 'relative' in format_dictionary['timestamp'] when relative formatting is implemented.
             dictionary['timestamp']['relative'] = timestamp.relative(float(dictionary['content_offset_seconds']))
 
+    # User colors
+    if 'message' in dictionary and 'user_color' not in dictionary['message']:
+
+        # Set color
+        if 'default_user_color' in format_dictionary and format_dictionary['default_user_color'] is not "random":
+            dictionary['message']['user_color'] = format_dictionary['default_user_color']
+        else:
+            # Random color
+            def rc() -> int:
+                return random.randint(0, 255)
+            dictionary['message']['user_color'] = '#%02X%02X%02X' % (rc(), rc(), rc())
+
     # IRC badge
     if '{commenter[irc_badge]}' in format_dictionary['format'] and 'message' in dictionary:
 
@@ -57,6 +70,3 @@ def use(dictionary: dict, format_dictionary: dict):
             'staff': '§',
             'broadcaster': '~',
         }.get(dictionary['message']['user_badges'][0]['_id'], '')
-
-    # SSA Color
-    dictionary['ssa_color'] = dictionary['message']['user_color']
