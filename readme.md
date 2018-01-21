@@ -4,7 +4,7 @@ A neat Python script to download chat messages from past broadcasts.
 
 ### Requirements
 
-* [Python 3](https://www.python.org/downloads/)
+* [Python 3.6 or newer](https://www.python.org/downloads/)
 * [A Twitch client ID](https://dev.twitch.tv/dashboard/apps)
 
 ### Installation
