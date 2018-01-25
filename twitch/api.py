@@ -1,6 +1,6 @@
 import app.config
+import app.cli
 import requests
-import logging
 from typing import Generator
 
 
@@ -13,8 +13,10 @@ def get(path: str, params: dict = None, headers: dict = None) -> requests.Respon
                                                params=params,
                                                headers=headers)
     if response.status_code != requests.codes.ok:
-        logging.warning('{} {} with {}'.format(response.status_code, response.url, params))
-
+        print('\n[Error]')
+        print('Twitch API returned status code {}. Please check your client ID.'.format(response.status_code))
+        print('\nUrl\t{}\nParams\t{}\nHeaders\t{}\n'.format(response.url, params, headers))
+        exit(1)
     return response
 
 

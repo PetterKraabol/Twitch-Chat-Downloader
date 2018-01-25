@@ -12,7 +12,7 @@ def prompt_video_id() -> str:
 def prompt_client_id(initialize: bool = False):
     print('Twitch requires a client ID to use their API.'
           '\nRegister an application on https://dev.twitch.tv/dashboard to get yours.')
-    app.config.settings['client_id'] = input('Client ID: ')
+    app.config.settings['client_id'] = input('Client ID: ').strip()
     if initialize:
         app.config.save(app.config.SETTINGS_FILE, app.config.settings)
     else:
@@ -84,3 +84,11 @@ if arguments.video is None and arguments.input is None:
 # Client ID
 if app.config.settings['client_id'] is None and arguments.client_id is None:
     prompt_client_id()
+
+# Client ID argument
+if arguments.client_id:
+    if app.config.settings['client_id'] is not arguments.client_id:
+        app.config.settings['client_id'] = str(arguments.client_id).strip()
+        save: str = input('Save client ID? (Y/n): ')
+        if not save.lower().startswith('n'):
+            app.config.save(app.config.SETTINGS_FILE, app.config.settings)

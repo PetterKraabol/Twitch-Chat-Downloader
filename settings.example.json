@@ -43,9 +43,9 @@
         },
         "ssa": {
             "comments": {
+                "default_user_color": "random",
                 "format": "{\\c&{message[user_color]}&}{commenter[display_name]} {\\c&HFFFFFF&}{message[body]}"
             },
-            "default_user_color": "random",
             "duration": 2000,
             "events": {
                 "dialogue": "Dialogue: Marked=0,{start},{end},Default,{commenter[display_name]},0000,0000,0000,,{comment}",
@@ -70,5 +70,5 @@
         }
     },
     "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.6"
+    "version": "2.0.7"
 }

@@ -1,5 +1,5 @@
 import app
-import random
+import hashlib
 from pipe import timestamp
 
 
@@ -45,13 +45,17 @@ def use(dictionary: dict, format_dictionary: dict):
     if 'message' in dictionary and 'user_color' not in dictionary['message']:
 
         # Set color
-        if 'default_user_color' in format_dictionary and format_dictionary['default_user_color'] is not "random":
+        if 'default_user_color' in format_dictionary and format_dictionary['default_user_color'] not in ['random',
+                                                                                                         'hash']:
             dictionary['message']['user_color'] = format_dictionary['default_user_color']
         else:
-            # Random color
-            def rc() -> int:
-                return random.randint(0, 255)
-            dictionary['message']['user_color'] = '#%02X%02X%02X' % (rc(), rc(), rc())
+            # Assign color based on commenter's ID
+            sha256 = hashlib.sha256()
+            sha256.update(str.encode(dictionary['commenter']['_id']))
+
+            # Truncate hash and mod it by 0xffffff-1 for color hex.
+            color: str = hex(int(sha256.hexdigest()[:32], 16) % int(hex(0xfffffe), 16))
+            dictionary['message']['user_color'] = '#{color}'.format(color=str(color).strip('0x'))
 
     # IRC badge
     if '{commenter[irc_badge]}' in format_dictionary['format'] and 'message' in dictionary:
