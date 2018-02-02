@@ -42,20 +42,33 @@ def use(dictionary: dict, format_dictionary: dict):
             dictionary['timestamp']['relative'] = timestamp.relative(float(dictionary['content_offset_seconds']))
 
     # User colors
-    if 'message' in dictionary and 'user_color' not in dictionary['message']:
+    if 'message' in dictionary:
 
         # Set color
-        if 'default_user_color' in format_dictionary and format_dictionary['default_user_color'] not in ['random',
-                                                                                                         'hash']:
-            dictionary['message']['user_color'] = format_dictionary['default_user_color']
-        else:
-            # Assign color based on commenter's ID
-            sha256 = hashlib.sha256()
-            sha256.update(str.encode(dictionary['commenter']['_id']))
+        if 'user_color' not in dictionary['message']:
+            if 'default_user_color' in format_dictionary and format_dictionary['default_user_color'] not in ['random',
+                                                                                                             'hash']:
+                dictionary['message']['user_color'] = format_dictionary['default_user_color']
+            else:
+                # Assign color based on commenter's ID
+                sha256 = hashlib.sha256()
+                sha256.update(str.encode(dictionary['commenter']['_id']))
 
-            # Truncate hash and mod it by 0xffffff-1 for color hex.
-            color: str = hex(int(sha256.hexdigest()[:32], 16) % int(hex(0xfffffe), 16))
-            dictionary['message']['user_color'] = '#{color}'.format(color=str(color).strip('0x'))
+                # Truncate hash and mod it by 0xffffff-1 for color hex.
+                color: str = hex(int(sha256.hexdigest()[:32], 16) % int(hex(0xffffff), 16)).lstrip('0x')
+
+                # Add any missing digits
+                while len(color) < 6:
+                    color = color + '0'
+
+                dictionary['message']['user_color'] = '#{color}'.format(color=color[:6])
+
+        # SSA Color
+        if 'message[ssa_user_color]' in format_dictionary['format']:
+            dictionary['message']['ssa_user_color'] = '#{b}{g}{r}'.format(
+                b=dictionary['message']['user_color'][5] + dictionary['message']['user_color'][6],
+                g=dictionary['message']['user_color'][3] + dictionary['message']['user_color'][4],
+                r=dictionary['message']['user_color'][1] + dictionary['message']['user_color'][2])
 
     # IRC badge
     if '{commenter[irc_badge]}' in format_dictionary['format'] and 'message' in dictionary:

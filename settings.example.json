@@ -44,7 +44,7 @@
         "ssa": {
             "comments": {
                 "default_user_color": "random",
-                "format": "{\\c&{message[user_color]}&}{commenter[display_name]} {\\c&HFFFFFF&}{message[body]}"
+                "format": "{\\c&{message[ssa_user_color]}&}{commenter[display_name]} {\\c&HFFFFFF&}{message[body]}"
             },
             "duration": 2000,
             "events": {
@@ -70,5 +70,5 @@
         }
     },
     "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.7"
+    "version": "2.0.8"
 }
