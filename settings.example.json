@@ -18,7 +18,19 @@
         "irc": {
             "comments": {
                 "action_format": "[{timestamp[relative]}] *{commenter[display_name]} {message[body]}]",
-                "format": "[{timestamp[relative]}] <{commenter[irc_badge]}{commenter[display_name]}> {message[body]}",
+                "badges": {
+                    "turbo": "+",
+                    "premium": "+",
+                    "bits": "$",
+                    "subscriber": "%",
+                    "moderator": "@",
+                    "global_mod": "*",
+                    "admin": "!",
+                    "staff": "&",
+                    "broadcaster": "~"
+                },
+                "format": "[{timestamp[relative]}] <{commenter[badge]}{commenter[display_name]}> {message[body]}",
+                "multiple_badges": false,
                 "timestamp": {
                     "relative": "%x"
                 }
@@ -70,5 +82,5 @@
         }
     },
     "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.8"
+    "version": "2.0.9"
 }

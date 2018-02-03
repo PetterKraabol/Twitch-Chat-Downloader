@@ -1,6 +1,7 @@
 import app
 import hashlib
 from pipe import timestamp
+from typing import List
 
 
 def use(dictionary: dict, format_dictionary: dict):
@@ -71,7 +72,7 @@ def use(dictionary: dict, format_dictionary: dict):
                 r=dictionary['message']['user_color'][1] + dictionary['message']['user_color'][2])
 
     # IRC badge
-    if '{commenter[irc_badge]}' in format_dictionary['format'] and 'message' in dictionary:
+    if '{commenter[badge]}' in format_dictionary['format'] and 'message' in dictionary:
 
         # Add empty badge if no badge
         if 'user_badges' not in dictionary['message']:
@@ -79,11 +80,36 @@ def use(dictionary: dict, format_dictionary: dict):
 
         # Set irc badge to first (highest) badge.
         # The Twitch API returns an array of badges, where the most important is first.
-        dictionary['commenter']['irc_badge'] = {
-            'subscriber': '+',
-            'moderator': '@',
-            'global_mod': '%',
-            'admin': '&',
-            'staff': '§',
-            'broadcaster': '~',
-        }.get(dictionary['message']['user_badges'][0]['_id'], '')
+
+        # Default badges
+        if 'badges' not in format_dictionary:
+            format_dictionary['badges'] = {
+                'turbo': '[turbo]',
+                'premium': '[prime]',
+                'bits': '[bits]',
+                'subscriber': '[sub]',
+                'moderator': '[mod]',
+                'global_mod': '[global mod]',
+                'admin': '[admin]',
+                'staff': '[staff]',
+                'broadcaster': '[streamer]',
+            }
+
+        # Default badges setting
+        if 'multiple_badges' not in format_dictionary:
+            format_dictionary['multiple_badges'] = False
+
+        # Get badge display text
+        badges: List[str] = []
+        for badge in dictionary['message']['user_badges']:
+            badges.append(format_dictionary['badges'].get(badge['_id'], ''))
+
+        # Display multiple badges or not
+        if format_dictionary['multiple_badges']:
+            dictionary['commenter']['badge'] = ''.join(badges)
+        else:
+            dictionary['commenter']['badge'] = ''
+            for badge in badges:
+                if badge != '':
+                    dictionary['commenter']['badge'] = badge
+                    break
