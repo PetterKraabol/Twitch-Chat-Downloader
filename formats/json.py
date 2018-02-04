@@ -6,7 +6,7 @@ from typing import Tuple, Generator, List
 
 def use(video: twitch.Video) -> Tuple[Generator[dict, None, None], str]:
     # Send video through pipe to generate output
-    output = pipe.output(video.metadata, app.settings['formats']['json']['output'])
+    output: str = pipe.output(video.metadata, app.settings['formats']['json']['output'])
 
     json_object = dict()
     json_object['video']: dict = video.metadata

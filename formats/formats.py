@@ -5,21 +5,11 @@ from typing import Tuple, Generator, Union
 from formats import custom, srt, ssa, json as _json
 
 
-class Error(Exception):
-    pass
-
-
-class FormatNameError(Error):
-
-    def __init__(self, message):
-        self.message = message
-
-
 def use(format_name: str, video: twitch.Video) -> Tuple[Generator[Union[Tuple[str, dict], dict], None, None], str]:
-
     # Check if format name exists
     if format_name not in app.config.settings['formats']:
-        raise FormatNameError('Unknown format: {}'.format(format_name))
+        print('Unknown format: {}'.format(format_name))
+        exit()
 
     # Select format method
     if format_name == 'json':

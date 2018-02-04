@@ -32,7 +32,7 @@ def dialogues(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dic
         # Avoid SSA variable conflicts with Python string formatting
         # This is done by temporarily removing opening and closing curly brackets used by SSA.
         #
-        # The main problem is detecting these curly brackets. We want to differenciate brackets that
+        # The main problem is detecting these curly brackets. We want to differentiate brackets that
         # should be used by the Python string formatter, and those used by SSA.
         #
         # Opening curly brackets for SSA can easily be found by looking for "{\", however,
@@ -54,16 +54,16 @@ def dialogues(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dic
                 ssa_closing_brackets_indices.append(index)
                 continue
 
-            open_bracket_counter = {
-                '{': open_bracket_counter + 1,  # Bracket is opened
-                '\\': open_bracket_counter - 1,  # Bracket was meant for SSA, not for Python
-                '}': open_bracket_counter - 1  # Closing bracket
-            }.get(letter, open_bracket_counter)
+            # Update counter
+            open_bracket_counter += {
+                '{': 1,  # Bracket is opened
+                '\\': -1,  # Bracket was meant for SSA, not for Python
+                '}': -1  # Closing bracket
+            }.get(letter, 0)
 
             # Multiple SSA commands within a curly brackets could make it negative
             # Example: {\\c&#000000&\\b1} will count 1, 0, -1, -2
-            if open_bracket_counter < 0:
-                open_bracket_counter = 0
+            open_bracket_counter = max(0, open_bracket_counter)
 
         # Add a temporary special character for SSA closing curly brackets
         for index in ssa_closing_brackets_indices:
@@ -74,7 +74,7 @@ def dialogues(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dic
             SSA_SPECIAL, SSA_CLOSE)
 
         # Format comment
-        comment_text, comment_dictionary = pipe.comment(comment, ssa_format['comments'])
+        comment_text = pipe.comment(comment, ssa_format['comments'])
 
         # Insert opening and closing curly brackets for SSA
         comment_text = comment_text.replace(SSA_OPEN, '{\\').replace(SSA_CLOSE, '}')
@@ -89,7 +89,7 @@ def dialogues(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dic
         }
         dialogue.update(comment)
 
-        yield ssa_format['events']['dialogue'].format_map(SafeDict(dialogue)), comment_dictionary
+        yield ssa_format['events']['dialogue'].format_map(SafeDict(dialogue)), comment
 
 
 def prefix(video_metadata: dict) -> Generator[Tuple[str, dict], None, None]:

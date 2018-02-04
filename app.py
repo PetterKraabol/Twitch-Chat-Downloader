@@ -7,8 +7,8 @@ def main():
     if app.arguments.format == 'all':
 
         # Whitelist and blacklist
-        whitelist: List[str] = None
-        blacklist: List[str] = None
+        whitelist: List[str] = []
+        blacklist: List[str] = []
 
         # Populate lists if configured in settings
         if 'all' in app.settings['formats']:

@@ -67,19 +67,17 @@ def use(dictionary: dict, format_dictionary: dict):
         # SSA Color
         if 'message[ssa_user_color]' in format_dictionary['format']:
             dictionary['message']['ssa_user_color'] = '#{b}{g}{r}'.format(
-                b=dictionary['message']['user_color'][5] + dictionary['message']['user_color'][6],
-                g=dictionary['message']['user_color'][3] + dictionary['message']['user_color'][4],
-                r=dictionary['message']['user_color'][1] + dictionary['message']['user_color'][2])
+                b=dictionary['message']['user_color'][5:7],
+                g=dictionary['message']['user_color'][3:5],
+                r=dictionary['message']['user_color'][1:3])
 
-    # IRC badge
+    # User badges
+    # The Twitch API returns an array of badges, ordered by their importance (descending).
     if '{commenter[badge]}' in format_dictionary['format'] and 'message' in dictionary:
 
         # Add empty badge if no badge
         if 'user_badges' not in dictionary['message']:
             dictionary['message']['user_badges'] = [{'_id': '', 'version': 1}]
-
-        # Set irc badge to first (highest) badge.
-        # The Twitch API returns an array of badges, where the most important is first.
 
         # Default badges
         if 'badges' not in format_dictionary:
@@ -87,8 +85,8 @@ def use(dictionary: dict, format_dictionary: dict):
                 'turbo': '[turbo]',
                 'premium': '[prime]',
                 'bits': '[bits]',
-                'subscriber': '[sub]',
-                'moderator': '[mod]',
+                'subscriber': '[subscriber]',
+                'moderator': '[moderator]',
                 'global_mod': '[global mod]',
                 'admin': '[admin]',
                 'staff': '[staff]',
@@ -109,6 +107,8 @@ def use(dictionary: dict, format_dictionary: dict):
             dictionary['commenter']['badge'] = ''.join(badges)
         else:
             dictionary['commenter']['badge'] = ''
+
+            # Find first defined user badge
             for badge in badges:
                 if badge != '':
                     dictionary['commenter']['badge'] = badge

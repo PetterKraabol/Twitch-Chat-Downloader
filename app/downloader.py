@@ -32,20 +32,20 @@ def download(video_id: str, format_name: str) -> str:
     # Save to file
     with open(output, 'w+', encoding='utf-8') as file:
 
-        # Save JSON to file
+        # Special case for saving JSON data
         if format_name == 'json':
             for data in lines:
                 json.dump(data, file, indent=4, sort_keys=True)
+        else:
+            # Save formatted comments/lines to file
+            for line, line_dictionary in lines:
+                if not app.cli.arguments.quiet and not app.cli.arguments.verbose:
+                    if app.cli.arguments.preview:
+                        print(line)
+                    elif 'content_offset_seconds' in line_dictionary:
+                        draw_progress(line_dictionary['content_offset_seconds'], video.metadata['length'], format_name)
 
-        # Save format lines to file
-        for line, line_dictionary in lines:
-            if not app.cli.arguments.quiet and not app.cli.arguments.verbose:
-                if app.cli.arguments.preview:
-                    print(line)
-                elif 'content_offset_seconds' in line_dictionary:
-                    draw_progress(line_dictionary['content_offset_seconds'], video.metadata['length'], format_name)
-
-            file.write('{}\n'.format(line))
+                file.write('{}\n'.format(line))
 
     # Print finished message
     if not app.cli.arguments.quiet:
