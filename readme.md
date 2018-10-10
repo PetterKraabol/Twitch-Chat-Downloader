@@ -40,4 +40,5 @@ python app.py -v 125936523 --format irc --output ~/Downloads
 
 ---
 
-[Check out the Wiki](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki)
+[Documentation](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki)
+ • [Twitch Python](https://github.com/PetterKraabol/Twitch-Python)
