@@ -1,6 +1,7 @@
+from datetime import datetime, timedelta
+
 import dateutil.parser
 from pytz import timezone
-from datetime import datetime, timedelta
 
 
 def parse_timestamp(value: str) -> datetime:

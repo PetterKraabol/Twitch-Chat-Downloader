@@ -1,5 +1,4 @@
 from app.utils import SafeDict
-from typing import Tuple
 
 
 def use(dictionary: dict, format_dictionary: dict) -> str:

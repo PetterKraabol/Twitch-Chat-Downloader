@@ -1,6 +1,5 @@
 import app
-from pipe import mapper, reducer, filter
-from typing import Tuple
+from app.pipe import mapper, reducer, filter
 
 
 # Formatting pipes

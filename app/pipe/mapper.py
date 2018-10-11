@@ -1,7 +1,8 @@
-import app
 import hashlib
-from pipe import timestamp
 from typing import List
+
+import app
+from app.pipe import timestamp
 
 
 def use(dictionary: dict, format_dictionary: dict):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import app
 from typing import List
+
+import app
 
 
 def main():

@@ -1,9 +1,10 @@
-import twitch
-import formats
-import os
 import json
-import app.cli
+import os
 import sys
+
+import app.cli
+import app.formats as formats
+import app.twitch as twitch
 
 
 def draw_progress(current: float, end: float, description: str = 'Downloading'):

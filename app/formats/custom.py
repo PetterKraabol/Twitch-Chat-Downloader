@@ -1,5 +1,5 @@
-import twitch
-import pipe
+import app.twitch as twitch
+import app.pipe as pipe
 from typing import Generator, Tuple
 
 

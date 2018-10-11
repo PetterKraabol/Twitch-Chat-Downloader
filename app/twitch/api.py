@@ -1,7 +1,9 @@
-import app.config
-import app.cli
-import requests
 from typing import Generator
+
+import requests
+
+import app.cli
+import app.config
 
 
 def get(path: str, params: dict = None, headers: dict = None) -> requests.Response:

@@ -1,9 +1,10 @@
-import app
-from app.utils import SafeDict
-import pipe
-import twitch
 import datetime
 from typing import Tuple, Generator
+
+import app
+import app.pipe as pipe
+import app.twitch as twitch
+from app.utils import SafeDict
 
 irc_format: dict = app.settings['formats']['srt']
 
@@ -14,7 +15,6 @@ def use(video: twitch.Video) -> Tuple[Generator[Tuple[str, dict], None, None], s
 
 def subtitles(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dict], None, None]:
     for index, comment in enumerate(comments):
-
         # Start and stop timestamps. Add a millisecond for timedelta to include millisecond digits.
         start: datetime.timedelta = datetime.timedelta(seconds=comment['content_offset_seconds'], milliseconds=0.001)
         stop: datetime.timedelta = start + datetime.timedelta(milliseconds=irc_format['duration'])

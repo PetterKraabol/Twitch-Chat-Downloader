@@ -1,10 +1,11 @@
-import app
-import pipe
-import twitch
 import datetime
 from itertools import chain
-from app.utils import SafeDict
 from typing import Tuple, Generator, List
+
+import app
+import app.pipe as pipe
+import app.twitch as twitch
+from app.utils import SafeDict
 
 ssa_format: dict = app.settings['formats']['ssa']
 

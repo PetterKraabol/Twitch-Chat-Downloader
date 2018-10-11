@@ -1,8 +1,13 @@
 import json
-import app.cli
-import twitch.api
-from typing import List, Generator
 from pathlib import Path
+from typing import List, Generator
+
+import twitch
+import twitch.helix as helix
+
+import app.cli
+import app.config
+import app.twitch.api as api
 
 
 class Video:
@@ -32,8 +37,10 @@ class Video:
 
         else:
             # Download from Twitch API
-            self.metadata: dict = twitch.api.video(video_id)
-            self.comments = twitch.api.comments(video_id)
+            helix = twitch.Helix(client_id=app.config.settings['client_id'], use_cache=True)
+            video: helix.Video = helix.video(video_id)
+            self.metadata: dict = api.video(video_id)
+            self.comments = self.comment_generator_from_api(video)
 
     def __str__(self):
         return self.metadata['title']
@@ -43,6 +50,11 @@ class Video:
 
     def id(self) -> str:
         return self.metadata['_id'].strip('v')
+
+    @staticmethod
+    def comment_generator_from_api(video: helix.Video) -> Generator[dict, None, None]:
+        for comment in video.comments():
+            yield comment.data
 
     @staticmethod
     def comment_generator(comments: List[dict]) -> Generator[dict, None, None]:

@@ -1,7 +1,8 @@
-import app
-import pipe
-import twitch
 from typing import Tuple, Generator, List
+
+import app
+import app.pipe as pipe
+import app.twitch as twitch
 
 
 def use(video: twitch.Video) -> Tuple[Generator[dict, None, None], str]:
