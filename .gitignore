@@ -4,6 +4,7 @@ settings.json
 .gtm/
 output/
 *.backup.json
+*.iml
 
 .DS_Store
 
