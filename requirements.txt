@@ -2,4 +2,3 @@ requests
 python-dateutil
 pytz
 twitch-python
-rx
