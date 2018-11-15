@@ -5,8 +5,7 @@ import app.config
 
 # Ask for video ID
 def prompt_video_id() -> str:
-    answer: str = input('Video ID: ')
-    return answer.strip('v')
+    return input('Video ID: ').strip('v').strip()
 
 
 # Ask for Twitch client ID
@@ -17,8 +16,8 @@ def prompt_client_id(initialize: bool = False):
     if initialize:
         app.config.save(app.config.SETTINGS_FILE, app.config.settings)
     else:
-        answer: str = input('Save client ID? (Y/n): ')
-        if not answer.lower().startswith('n'):
+        answer: str = input('Save client ID? (Y/n): ').strip().lower()
+        if not answer.startswith('n'):
             app.config.save(app.config.SETTINGS_FILE, app.config.settings)
 
 
@@ -90,6 +89,7 @@ if app.config.settings['client_id'] is None and arguments.client_id is None:
 if arguments.client_id:
     if app.config.settings['client_id'] is not arguments.client_id:
         app.config.settings['client_id'] = str(arguments.client_id).strip()
-        save: str = input('Save client ID? (Y/n): ')
-        if not save.lower().startswith('n'):
+        save: str = input('Save client ID? (Y/n): ').strip().lower()
+        if not save.startswith('n'):
             app.config.save(app.config.SETTINGS_FILE, app.config.settings)
+
