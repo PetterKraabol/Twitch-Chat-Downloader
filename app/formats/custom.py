@@ -1,19 +1,22 @@
-import app.twitch as twitch
-import app.pipe as pipe
-from typing import Generator, Tuple
+from typing import Tuple, Union, Generator
+
+import twitch
+
+from app.formats.format import Format
+from app.pipe import Pipe
 
 
-def use(custom_format: dict, video: twitch.Video) -> Tuple[Generator[Tuple[str, dict], None, None], str]:
-    # Format comments
-    comments: Generator[Tuple[str, dict], None, None] = comment_generator(video.comments, custom_format['comments'])
+class Custom(Format):
 
-    # Format output
-    output = pipe.output(video.metadata, custom_format['output'])
+    def __init__(self, video: twitch.helix.Video, format_dictionary: dict):
+        super().__init__(video, format_dictionary)
+        self.comment_pipe = Pipe(format_dictionary=format_dictionary['comments'])
+        self.output_pipe = Pipe(format_dictionary=format_dictionary['output'])
+        print('Custom')
 
-    return comments, output
+    def use(self) -> Tuple[Generator[Union[Tuple[str, dict], dict], None, None], str]:
+        return self.comment_generator(self.video.comments()), self.output_pipe.format_output(self.video.data)
 
-
-def comment_generator(comments: Generator[dict, None, None],
-                      comment_format: dict) -> Generator[Tuple[str, dict], None, None]:
-    for comment in comments:
-        yield pipe.comment(comment, comment_format), comment
+    def comment_generator(self, comments: twitch.v5.Comments) -> Generator[Union[Tuple[str, dict], dict], None, None]:
+        for comment in comments:
+            yield self.comment_pipe.format_comment(comment.data)

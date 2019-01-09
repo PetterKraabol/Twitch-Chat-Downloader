@@ -1,9 +1,11 @@
 import twitch
 import twitch.helix as helix
 
+from app.singleton import Singleton
 from app.settings import Settings
 
-class Video:
+
+class Twitch(metaclass=Singleton):
 
     def __init__(self):
         client_id = Settings().config.get('client_id')

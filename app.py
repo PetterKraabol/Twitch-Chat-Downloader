@@ -1,46 +1,58 @@
 #!/usr/bin/env python3
-from typing import List
+import argparse
+import os
+from pathlib import Path
 
-import app
+from app import Arguments, Settings, Downloader
 
 
-def main():
-    if app.arguments.format == 'all':
+def main() -> None:
+    # Print version number
+    if Arguments().version:
+        print('Twitch Chat Downloader', Settings().config['version'])
+        exit()
 
-        # Whitelist and blacklist
-        whitelist: List[str] = []
-        blacklist: List[str] = []
+    # List formats
+    if Arguments().formats:
+        for format_name in [f for f in Settings().config['formats'] if f not in ['all']]:
+            format_dictionary = Settings().config['formats'][format_name]
+            if 'comments' in format_dictionary:
+                print('\tcomment: {}'.format(Settings().config['formats'][format_name]['comments']['format']))
+            if 'output' in format_dictionary:
+                print('\toutput: {}'.format(Settings().config['formats'][format_name]['output']['format']))
+            print('\n')
 
-        # Populate lists if configured in settings
-        if 'all' in app.settings['formats']:
-            if 'whitelist' in app.settings['formats']['all']:
-                whitelist = app.settings['formats']['all']['whitelist']
-
-            if 'blacklist' in app.settings['formats']['all']:
-                blacklist = app.settings['formats']['all']['blacklist']
-
-        # If not input, download JSON data form API and
-        # use it as input value for the other formats.
-        if app.arguments.input is None:
-            app.arguments.input = app.download(app.arguments.video, 'json')
-
-        # Download all formats. Ignore 'all' and 'json'.
-        for format_name in app.settings['formats']:
-            if format_name not in ['all', 'json']:
-
-                if (whitelist and format_name not in whitelist) or (blacklist and format_name in blacklist):
-                    if app.arguments.verbose:
-                        print('Skipping {format_name}'.format(format_name=format_name))
-                    continue
-                else:
-                    app.download(app.arguments.video, format_name)
-
-    else:
-        app.download(app.arguments.video, app.arguments.format)
-
-    if app.arguments.verbose:
-        print('Done')
+    # Download
+    downloader = Downloader()
+    if Arguments().video:
+        downloader.download_videos([Arguments().video])
+    elif Arguments().channel:
+        downloader.download_channel(Arguments().channel)
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Twitch Chat Downloader')
+    parser.add_argument('-v', '--video', type=str, help='Video ID')
+    parser.add_argument('-c', '--channel', type=str, help='Channel name')
+    parser.add_argument('--limit', type=int, default=5, help='Number of videos from channel')
+    parser.add_argument('--client_id', '--', type=str, help='Twitch client ID')
+    parser.add_argument('--verbose', action='store_true', help='Verbose output')
+    parser.add_argument('-q', '--quiet', action='store_true')
+    parser.add_argument('-o', '--output', type=str, help='Output folder', default='./output')
+    parser.add_argument('-f', '--format', type=str, help='Message format', default='default')
+    parser.add_argument('--start', type=int, help='Start time in seconds from video start')
+    parser.add_argument('--stop', type=int, help='Stop time in seconds from video start')
+    parser.add_argument('--timezone', type=str, help='Timezone name')
+    parser.add_argument('--init', action='store_true', help='Script setup')
+    parser.add_argument('--update', action='store_true', help='Update settings')
+    parser.add_argument('--version', action='store_true', help='Settings version')
+    parser.add_argument('--formats', action='store_true', help='List available formats')
+    parser.add_argument('--preview', action='store_true', help='Print chat lines')
+    parser.add_argument('--input', type=str, help='Read data from JSON file')
+    parser.add_argument('--settings', type=str, default=str(Path.home()) + '/.tcd/settings.json',
+                        help='Custom settings file')
+
+    Arguments(parser.parse_args().__dict__)
+    Settings(Arguments().settings_file,
+             reference_filepath=f'{os.path.dirname(os.path.abspath(__file__))}/settings.reference.json')
     main()

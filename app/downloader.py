@@ -1,57 +1,72 @@
 import json
 import os
 import sys
+from typing import List
 
-import app.cli
-import app.formats as formats
-import app.twitch as twitch
+import twitch
 
-
-def draw_progress(current: float, end: float, description: str = 'Downloading'):
-    sys.stdout.write('[{}] {}%\r'.format(description, '%.2f' % min(current * 10 / end * 10, 100.00)))
-    sys.stdout.flush()
+from app.arguments import Arguments
+from app.formatter import Formatter
+from app.settings import Settings
 
 
-def download_multiple_formats():
-    pass
+class Downloader:
 
+    def __init__(self):
+        self.helix_api = twitch.Helix(client_id=Settings().config['client_id'], use_cache=True)
+        self.formats: List[str] = []
+        self.whitelist: List[str] = []
+        self.blacklist: List[str] = []
 
-def download(video_id: str, format_name: str) -> str:
-    if app.cli.arguments.verbose:
-        print('Downloading {} initialized'.format(format_name))
+        if Arguments().format == 'all':
+            if 'all' in Settings().config['formats']:
+                self.blacklist = Settings().config['formats']['all']['whitelist'] or []
+                self.whitelist = Settings().config['formats']['all']['blackilst'] or []
 
-    # Get Video
-    video: twitch.Video = twitch.Video(video_id)
-
-    # Format video comments and output
-    lines, output = formats.use(format_name, video)
-
-    # Create output directory
-    if not os.path.exists(os.path.dirname(output)):
-        os.makedirs(os.path.dirname(output))
-
-    # Save to file
-    with open(output, 'w+', encoding='utf-8') as file:
-
-        # Special case for saving JSON data
-        if format_name == 'json':
-            for data in lines:
-                json.dump(data, file, indent=4, sort_keys=True)
+                self.formats = [format_name for format_name in dict(Settings().config['formats']).keys() if
+                                (self.whitelist and format_name not in self.whitelist) or
+                                (self.blacklist and format_name not in self.blacklist)]
         else:
-            # Save formatted comments/lines to file
-            for line, line_dictionary in lines:
-                if not app.cli.arguments.quiet and not app.cli.arguments.verbose:
-                    if app.cli.arguments.preview:
-                        print(line)
-                    elif 'content_offset_seconds' in line_dictionary:
-                        draw_progress(line_dictionary['content_offset_seconds'], video.metadata['length'], format_name)
+            self.formats.append(Arguments().format)
 
-                file.write('{}\n'.format(line))
+    def download_videos(self, video_ids: List[str]) -> None:
+        """
+        Download videos by IDs to files
+        :param video_ids: List of video IDs
+        :return: None
+        """
+        for video in self.helix_api.videos(video_ids):
+            for format_name in self.formats:
+                lines, output = Formatter(video).use(format_name)
 
-    # Print finished message
-    if not app.cli.arguments.quiet:
-        if app.cli.arguments.verbose:
-            print('Finished downloading {} to {}'.format(format_name, output))
-        else:
-            print('[{}] {}'.format(format_name, output))
-    return output
+                # Save to file
+                if not os.path.exists(os.path.dirname(output)):
+                    os.makedirs(os.path.dirname(output))
+
+                with open(output, 'w+') as file:
+
+                    # Special case for JSON
+                    # todo: probably won't work in this solution because we don't download JSON data first
+                    #   (input not guaranteed)
+                    if format_name == 'json':
+                        for data in lines:
+                            json.dump(data, file, indent=4, sort_keys=True)
+                    else:
+                        for comment_line in lines:
+                            print(comment_line)
+                            file.write('{}\n'.format(comment_line))
+
+        print('Finished downloading', video_ids)
+
+    def download_channel(self, channel: str) -> None:
+        """
+        Download videos by channel name
+        :param channel:
+        :return:
+        """
+        self.download_videos([video.id for video in self.helix_api.user(channel).videos(limit=Arguments().limit)])
+
+    @staticmethod
+    def draw_progress(current: float, end: float, description: str = 'Downloading') -> None:
+        sys.stdout.write('[{}] {}%\r'.format(description, '%.2f' % min(current * 10 / end * 10, 100.00)))
+        sys.stdout.flush()
