@@ -25,9 +25,9 @@ def main() -> None:
     # Download
     downloader = Downloader()
     if Arguments().video:
-        downloader.download_videos([Arguments().video])
+        downloader.videos([Arguments().video])
     elif Arguments().channel:
-        downloader.download_channel(Arguments().channel)
+        downloader.channel(Arguments().channel)
 
 
 if __name__ == "__main__":

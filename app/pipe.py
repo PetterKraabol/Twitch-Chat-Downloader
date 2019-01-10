@@ -1,7 +1,7 @@
 import hashlib
 import string
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Optional
 
 import dateutil.parser
 from pytz import timezone
@@ -11,6 +11,10 @@ from app.safedict import SafeDict
 
 
 class Pipe:
+    """
+    Pipe takes care of adding custom data fields and finally
+    format data into comment and output file strings
+    """
 
     def __init__(self, format_dictionary: dict):
         """
@@ -38,15 +42,33 @@ class Pipe:
 
         return self.reduce(data)
 
-    def format_comment(self, data: dict) -> str:
-        return self.format(data)
+    def comment(self, comment_data: dict) -> str:
+        """
+        Format comment data to string
+        :param comment_data: Comment data
+        :return: Formatted comment line
+        """
+        return self.format(comment_data)
 
-    def format_output(self, data: dict) -> str:
-        output_string = self.format(data)
+    def output(self, video_data: dict) -> str:
+        """
+        Format output path from data
+        :param video_data: Video data
+        :return: Output string
+        """
+        output_string = self.format(video_data)
         return '{}/{}'.format(Arguments().output.rstrip('/').rstrip('\\'), output_string)
 
-    def timestamp(self, date_format: str, date_value: str, timezone_name: str = None) -> str:
-        date: datetime = self.parse_timestamp(date_value)
+    @staticmethod
+    def timestamp(date_format: str, date_value: str, timezone_name: Optional[str] = None) -> str:
+        """
+        Parse timestamp, format it and change timezone if a timezone name is given
+        :param date_format: Wanted date format
+        :param date_value: Input value to be parsed
+        :param timezone_name: Timezone name
+        :return: Timestamp in string format
+        """
+        date: datetime = dateutil.parser.parse(date_value)
 
         # Convert to another timezone
         if timezone_name is not None:
@@ -61,12 +83,10 @@ class Pipe:
         delta = delta - timedelta(microseconds=delta.microseconds)
         return str(delta)
 
-    @staticmethod
-    def parse_timestamp(value: str) -> datetime:
-        return dateutil.parser.parse(value)
-
     def reduce(self, data: dict) -> str:
         """
+        Main formatting
+
         Map data dictionary to format string
         :param data: Input data
         :return: Formatted string
