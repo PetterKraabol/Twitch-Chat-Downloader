@@ -38,9 +38,16 @@ class Video:
         else:
             # Download from Twitch API
             helix = twitch.Helix(client_id=app.config.settings['client_id'], use_cache=True)
-            video: helix.Video = helix.video(video_id)
+
+            try:
+                video: helix.Video = helix.video(video_id)
+            except KeyError:
+                print('Error: Invalid video or client id.')
+
             self.metadata: dict = api.video(video_id)
             self.comments = self.comment_generator_from_api(video)
+
+
 
     def __str__(self):
         return self.metadata['title']
