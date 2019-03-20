@@ -15,9 +15,11 @@ def get(path: str, params: dict = None, headers: dict = None) -> requests.Respon
                                                params=params,
                                                headers=headers)
     if response.status_code != requests.codes.ok:
-        print('\n[Error]')
-        print('Twitch API returned status code {}. Please check your client ID.'.format(response.status_code))
-        print('\nUrl\t{}\nParams\t{}\nHeaders\t{}\n'.format(response.url, params, headers))
+        print('\n[{}]'.format(response.json()['error']))
+        print(response.json()['message'])
+        print('\nURL\t', response.url)
+        print('Params\t', params)
+        print('Headers\t', headers)
         exit(1)
     return response
 
