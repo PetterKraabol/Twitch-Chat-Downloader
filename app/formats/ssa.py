@@ -15,6 +15,9 @@ SSA_SPECIAL: str = '♣'
 
 
 def use(video: twitch.Video) -> Tuple[Generator[Tuple[str, dict], None, None], str]:
+    """
+    Formatted according to https://www.matroska.org/technical/specs/subtitles/ssa.html
+    """
     output = pipe.output(video.metadata, ssa_format['output'])
 
     return generator(video), output
@@ -25,9 +28,29 @@ def generator(video: twitch.Video) -> Generator[Tuple[str, dict], None, None]:
         yield line
 
 
+def ssa_timestamp_formatter(time: datetime.timedelta) -> str:
+    """
+    Convert timedelta to h:mm:ss.cc
+    https://www.matroska.org/technical/specs/subtitles/ssa.html
+
+    :param time: Timedelta
+    :return: Formatted time string
+    """
+    days, seconds = divmod(time.total_seconds(), 24 * 60 * 60)
+    hours, seconds = divmod(seconds, 60 * 60)
+    minutes, seconds = divmod(seconds, 60)
+    centiseconds = int((seconds - int(seconds)) * 100)
+
+    # Floor seconds and merge days to hours
+    seconds = int(seconds)
+    hours += days * 24
+
+    return f'{int(hours):01d}:{int(minutes):02d}:{int(seconds):02d}.{centiseconds:02d}'
+
+
 def dialogues(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dict], None, None]:
     for comment in comments:
-        start: datetime.timedelta = datetime.timedelta(seconds=comment['content_offset_seconds'], milliseconds=0.001)
+        start: datetime.timedelta = datetime.timedelta(seconds=comment['content_offset_seconds'])
         end: datetime.timedelta = start + datetime.timedelta(milliseconds=ssa_format['duration'])
 
         # Avoid SSA variable conflicts with Python string formatting
@@ -84,8 +107,8 @@ def dialogues(comments: Generator[dict, None, None]) -> Generator[Tuple[str, dic
         comment_text = comment_text.replace('\\c&#', '\\c&H').replace('\\c&H#', '\\c&H')
 
         dialogue: dict = {
-            'start': str(start)[:-4],
-            'end': str(end)[:-4],
+            'start': ssa_timestamp_formatter(start),
+            'end': ssa_timestamp_formatter(end),
             'comment': comment_text
         }
         dialogue.update(comment)
