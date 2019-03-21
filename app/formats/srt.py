@@ -24,7 +24,8 @@ class SRT(Format):
         """
         return self.subtitles(self.video.comments()), Pipe(self.format_dictionary['output']).output(self.video.data)
 
-    def format_timestamp(self, time: datetime.timedelta) -> str:
+    @staticmethod
+    def format_timestamp(time: datetime.timedelta) -> str:
         """
         Convert timedelta to h:mm:ss.cc
         https://www.matroska.org/technical/specs/subtitles/ssa.html
@@ -41,7 +42,7 @@ class SRT(Format):
         seconds = int(seconds)
         hours += days * 24
 
-        return f'{int(hours):01d}:{int(minutes):02d}:{int(seconds):02d}.{milliseconds:03d}'
+        return f'{int(hours):01d}:{int(minutes):02d}:{int(seconds):02d},{milliseconds:03d}'
 
     def subtitles(self, comments: twitch.v5.Comments) -> Generator[Tuple[str, twitch.v5.Comment], None, None]:
         """
@@ -51,7 +52,7 @@ class SRT(Format):
         """
         for index, comment in enumerate(comments):
             # Stat and stop timestamps. Add a millisecond for timedelta to include millisecond digits
-            start = datetime.timedelta(seconds=comment.content_offset_seconds, milliseconds=0.001)
+            start = datetime.timedelta(seconds=comment.content_offset_seconds)
             stop: datetime.timedelta = start + datetime.timedelta(milliseconds=self.format_dictionary['duration'])
 
             # Format message
@@ -61,8 +62,8 @@ class SRT(Format):
             # Subtract the last three milliseconds form timestamp (required by SRT)
             subtitle: dict = {
                 'index': index + 1,
-                'start': str(start).replace('.', ',')[:-3],
-                'stop': str(stop).replace('.', ',')[:-3],
+                'start': SRT.format_timestamp(start),
+                'stop': SRT.format_timestamp(stop),
                 'message': message
             }
 

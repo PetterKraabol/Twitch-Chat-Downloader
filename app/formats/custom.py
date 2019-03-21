@@ -12,6 +12,10 @@ class Custom(Format):
         super().__init__(video, format_name)
 
     def use(self) -> Tuple[Generator[Tuple[str, twitch.v5.Comment], None, None], str]:
+        """
+        Use this format
+        :return: tuple(formatted comment, comment), output format
+        """
         # Format comments
         comments = self.comment_generator(self.video.comments())
 

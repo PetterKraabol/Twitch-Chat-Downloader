@@ -72,7 +72,7 @@ class Settings(metaclass=Singleton):
         Update configuration settings and file using reference settings.
         :return: None
         """
-        self.save('settings.{version}.backup.json').format(self.config['version'], self.config)
+        self.save('settings.{}.backup.json'.format(self.config['version'], self.config))
         new_config: dict = self.load(self.reference_filepath)
 
         # Copy client ID to new config file

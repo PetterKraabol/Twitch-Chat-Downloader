@@ -93,5 +93,10 @@ class Logger(metaclass=Singleton):
         return True
 
     def save(self, filename: str = 'tcd.log') -> None:
+        """
+        Save retained logs to file
+        :param filename: File to save to
+        :return: None
+        """
         with open(filename, 'w') as file:
             [file.write('{}\n'.format(log.full())) for log in self.logs]

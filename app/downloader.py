@@ -5,13 +5,14 @@ import re
 import sys
 from typing import List
 
+import dateutil
 import twitch
 
 from app.arguments import Arguments
 from app.formatter import Formatter
+from app.logger import Logger, Log
 from app.pipe import Pipe
 from app.settings import Settings
-from app.logger import Logger, Log
 
 
 class Downloader:
@@ -96,31 +97,59 @@ class Downloader:
 
             for comment in video.comments():
                 data['comments'].append(comment.data)
-                self.draw_progress(current=comment.content_offset_seconds,
-                                   end=video_duration.seconds,
-                                   description='json')
+
+                # Ignore comments that were posted after the VOD finished
+                if Settings().config['formats']['json']['comments'].get('ignore_new_comments', False):
+                    comment_date = dateutil.parser.parse(comment.created_at)
+                    vod_finish_date = dateutil.parser.parse(video.created_at) + video_duration
+
+                    if comment_date > vod_finish_date:
+                        continue
+
+                if Logger().should_print(Log.PROGRESS):
+                    self.draw_progress(current=comment.content_offset_seconds,
+                                       end=video_duration.seconds,
+                                       description='json')
 
             with open(output, 'w') as file:
                 json.dump(data, file, indent=4, sort_keys=True)
 
-            Logger().log(f'[json] {output}', Log.PROGRESS)
+            Logger().log(f'[json] {output}')
 
-        # For each format
+        # For each format (ignore json this time)
         for format_name in [x for x in self.formats if x not in ['json']]:
-            # Get formatted lines and output file
+
+            # Get (formatted_comment, comment), output
             comment_tuple, output = formatter.use(format_name)
 
+            # Create output directory and write to file
             os.makedirs(os.path.dirname(output), exist_ok=True)
             with open(output, '+w', encoding='utf-8') as file:
-                for line, comment in comment_tuple:
-                    if comment:
+
+                # For every comment in video
+                for formatted_comment, comment in comment_tuple:
+
+                    # Ignore comments that were posted after the VOD finished
+                    if Settings().config['formats'][format_name]['comments'].get('ignore_new_comments', False):
+                        comment_date = dateutil.parser.parse(comment.created_at)
+                        vod_finish_date = dateutil.parser.parse(video.created_at) + video_duration
+
+                        if comment_date > vod_finish_date:
+                            continue
+
+                    # Draw progress
+                    if comment and Logger().should_print(Log.PROGRESS):
                         self.draw_progress(current=comment.content_offset_seconds,
                                            end=video_duration.seconds,
                                            description=format_name)
 
-                    file.write(f'{line}')
+                    # Display preview
+                    Logger().log(formatted_comment, Log.PREVIEW)
 
-            Logger().log('[{}] {}'.format(format_name, output), Log.PROGRESS)
+                    # Write comment to file
+                    file.write(f'{formatted_comment}')
+
+            Logger().log('[{}] {}'.format(format_name, output))
 
     def videos(self, video_ids: List[int]) -> None:
         """
@@ -153,7 +182,5 @@ class Downloader:
         :param description: Progress description
         :return:
         """
-        # Check if progress should be drawn
-        if Logger().should_print(Log.PROGRESS):
-            sys.stdout.write('[{}] {}%\r'.format(description, '%.2f' % min(current * 10 / end * 10, 100.00)))
-            sys.stdout.flush()
+        sys.stdout.write('[{}] {}%\r'.format(description, '%.2f' % min(current * 10 / end * 10, 100.00)))
+        sys.stdout.flush()

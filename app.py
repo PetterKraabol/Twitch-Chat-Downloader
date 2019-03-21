@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
+
 import argparse
 import os
 from pathlib import Path
 
-from app import Arguments, Settings, Downloader, Logger, Log
+from app import Arguments, Settings, Downloader, Logger
 
 
-def main() -> None:
+def main():
     # Print version number
     if Arguments().print_version:
         Logger().log('Twitch Chat Downloader {}'.format(Settings().config['version']), retain=False)
@@ -72,4 +73,5 @@ if __name__ == "__main__":
     Arguments(parser.parse_args().__dict__)
     Settings(Arguments().settings_file,
              reference_filepath=f'{os.path.dirname(os.path.abspath(__file__))}/settings.reference.json')
+
     main()

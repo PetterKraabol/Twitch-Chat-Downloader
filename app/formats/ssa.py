@@ -18,11 +18,19 @@ class SSA(Format):
         super().__init__(video, format_name='ssa')
 
     def use(self) -> Tuple[Generator[Tuple[str, twitch.v5.Comment], None, None], str]:
+        """
+        Use SSA format
+        :return:
+        """
         output: str = Pipe(self.format_dictionary['output']).output(self.video.data)
 
         return self.generator(), output
 
     def generator(self) -> Generator[Tuple[str, Optional[twitch.v5.Comment]], None, None]:
+        """
+        Line generator
+        :return:
+        """
         for line in chain(self.prefix(), self.dialogues(self.video.comments())):
             yield line
 
@@ -47,6 +55,11 @@ class SSA(Format):
         return f'{int(hours):01d}:{int(minutes):02d}:{int(seconds):02d}.{centiseconds:02d}'
 
     def dialogues(self, comments: twitch.v5.Comments) -> Generator[Tuple[str, twitch.v5.Comments], None, None]:
+        """
+        Format comments as SSA dialogues
+        :param comments: Comment to format
+        :return: tuple(formatted comment, comment)
+        """
         for comment in comments:
             start: datetime.timedelta = datetime.timedelta(seconds=comment.content_offset_seconds)
             end: datetime.timedelta = start + datetime.timedelta(milliseconds=self.format_dictionary['duration'])
@@ -116,6 +129,10 @@ class SSA(Format):
             yield self.format_dictionary['events']['dialogue'].format_map(SafeDict(dialogue)), comment
 
     def prefix(self) -> Generator[Tuple[str, None], None, None]:
+        """
+        SSA file header
+        :return: Generator for header lines
+        """
         lines: List[str] = list()
 
         # Script info
