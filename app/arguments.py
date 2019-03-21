@@ -32,14 +32,15 @@ class Arguments(metaclass=Singleton):
 
         # Optional or prompted arguments
         self.client_id: str = str(arguments['client_id']) or None
-        self.channel: str = str(arguments['channel']).lower() or None
-        self.limit: int = arguments['limit'] or None
+        self.channel: str = str(arguments['channel']).lower() if arguments['channel'] else None
+        self.first: int = arguments['first'] or None
         self.video: str = arguments['video'] or None
-        self.format: str = str(arguments['format']).lower() or None
+        self.format: str = str(arguments['format']).lower() if arguments['format'] else None
         self.timezone: str = arguments['timezone'] or None
         self.start: int = arguments['start'] or None
         self.stop: int = arguments['stop'] or None
         self.input = pathlib.Path(arguments['input']) if arguments['input'] else None
+
 
     @staticmethod
     def prompt_video_id() -> str:
@@ -47,7 +48,7 @@ class Arguments(metaclass=Singleton):
         Prompt for video ID if necessary
         :return: Video ID
         """
-        return input('Video ID: ').strip()
+        return input('Video ID(s): ').strip()
 
     @staticmethod
     def prompt_client_id() -> str:

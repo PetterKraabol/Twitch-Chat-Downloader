@@ -24,6 +24,25 @@ class SRT(Format):
         """
         return self.subtitles(self.video.comments()), Pipe(self.format_dictionary['output']).output(self.video.data)
 
+    def format_timestamp(self, time: datetime.timedelta) -> str:
+        """
+        Convert timedelta to h:mm:ss.cc
+        https://www.matroska.org/technical/specs/subtitles/ssa.html
+
+        :param time: Timedelta
+        :return: Formatted time string
+        """
+        days, seconds = divmod(time.total_seconds(), 24 * 60 * 60)
+        hours, seconds = divmod(seconds, 60 * 60)
+        minutes, seconds = divmod(seconds, 60)
+        milliseconds = int((seconds - int(seconds)) * 1000)
+
+        # Floor seconds and merge days to hours
+        seconds = int(seconds)
+        hours += days * 24
+
+        return f'{int(hours):01d}:{int(minutes):02d}:{int(seconds):02d}.{milliseconds:03d}'
+
     def subtitles(self, comments: twitch.v5.Comments) -> Generator[Tuple[str, twitch.v5.Comment], None, None]:
         """
         Subtitle generator

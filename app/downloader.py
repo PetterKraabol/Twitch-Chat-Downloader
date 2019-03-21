@@ -23,27 +23,55 @@ class Downloader:
         self.blacklist: List[str] = []
 
         # Populate format list according to whitelist and blacklist
-        if Arguments().format == 'all':
-            if 'all' in Settings().config['formats']:
-                self.blacklist = Settings().config['formats']['all']['whitelist'] or []
-                self.whitelist = Settings().config['formats']['all']['blacklist'] or []
+        if Arguments().format == 'all' and 'all' in Settings().config['formats']:
+            self.blacklist = Settings().config['formats']['all']['whitelist'] or []
+            self.whitelist = Settings().config['formats']['all']['blacklist'] or []
 
-                for format_name in [f for f in Settings().config['formats'].keys() if f not in ['all']]:
-                    if (self.whitelist and format_name not in self.whitelist) or (
-                        self.blacklist and format_name in self.blacklist):
-                        pass
-                    else:
-                        self.formats.append(format_name)
-        else:
+            # Append formats to list if they can be used
+            [self.formats.append(format_name) for format_name in Settings().config['formats'].keys() if
+             self.can_use_format(format_name)]
+
+        elif self.can_use_format(Arguments().format):
             self.formats.append(Arguments().format)
 
-    def videos(self, video_ids: List[str]) -> None:
+        # Make format names lowercase
+        self.formats = [format_name.lower() for format_name in self.formats]
+
+    def can_use_format(self, format_name) -> bool:
+        """
+        Check if format name should be used based on whitelist and blacklist
+        :param format_name: Name of format
+        :return: If format should be used
+        """
+
+        # Lowercase format name
+        format_name = format_name.lower()
+
+        # Reserved format names
+        if format_name in ['all']:
+            return False
+
+        # Format does not exist
+        if format_name not in Settings().config['formats'].keys():
+            return False
+
+        # Whitelisted formats
+        if self.whitelist and format_name not in self.whitelist:
+            return False
+
+        # Blacklisted formats
+        if self.blacklist and format_name in self.blacklist:
+            return False
+
+        return True
+
+    def videos(self, video_ids: List[int]) -> None:
         for video in self.helix_api.videos(video_ids):
+            print(video.title)
 
             # Parse video duration
             regex = re.compile(r'((?P<hours>\d+?)h)?((?P<minutes>\d+?)m)?((?P<seconds>\d+?)s)?')
-            parts = regex.match(video.duration)
-            parts = parts.groupdict()
+            parts = regex.match(video.duration).groupdict()
 
             time_params = {}
             for name, param in parts.items():
@@ -55,6 +83,7 @@ class Downloader:
             formatter = Formatter(video)
 
             # Special case for JSON
+            # Build JSON object before writing it
             if 'json' in self.formats:
                 output: str = Pipe(Settings().config['formats']['json']['output']).output(video.data)
                 os.makedirs(os.path.dirname(output), exist_ok=True)
@@ -82,7 +111,7 @@ class Downloader:
                 comment_tuple, output = formatter.use(format_name)
 
                 os.makedirs(os.path.dirname(output), exist_ok=True)
-                with open(output, '+w') as file:
+                with open(output, '+w', encoding='utf-8') as file:
                     for line, comment in comment_tuple:
                         if comment:
                             self.draw_progress(current=comment.content_offset_seconds,
@@ -99,7 +128,7 @@ class Downloader:
         :param channel:
         :return:
         """
-        self.videos([video.id for video in self.helix_api.user(channel).videos(limit=Arguments().limit)])
+        self.videos([int(video.id) for video in self.helix_api.user(channel).videos(first=Arguments().first)])
 
     @staticmethod
     def draw_progress(current: float, end: float, description: str = 'Downloading') -> None:

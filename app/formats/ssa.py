@@ -26,9 +26,29 @@ class SSA(Format):
         for line in chain(self.prefix(), self.dialogues(self.video.comments())):
             yield line
 
+    @staticmethod
+    def format_timestamp(time: datetime.timedelta) -> str:
+        """
+        Convert timedelta to h:mm:ss.cc
+        https://www.matroska.org/technical/specs/subtitles/ssa.html
+
+        :param time: Timedelta
+        :return: Formatted time string
+        """
+        days, seconds = divmod(time.total_seconds(), 24 * 60 * 60)
+        hours, seconds = divmod(seconds, 60 * 60)
+        minutes, seconds = divmod(seconds, 60)
+        centiseconds = int((seconds - int(seconds)) * 100)
+
+        # Floor seconds and merge days to hours
+        seconds = int(seconds)
+        hours += days * 24
+
+        return f'{int(hours):01d}:{int(minutes):02d}:{int(seconds):02d}.{centiseconds:02d}'
+
     def dialogues(self, comments: twitch.v5.Comments) -> Generator[Tuple[str, twitch.v5.Comments], None, None]:
         for comment in comments:
-            start: datetime.timedelta = datetime.timedelta(seconds=comment.content_offset_seconds, milliseconds=0.001)
+            start: datetime.timedelta = datetime.timedelta(seconds=comment.content_offset_seconds)
             end: datetime.timedelta = start + datetime.timedelta(milliseconds=self.format_dictionary['duration'])
 
             # Avoid SSA variable conflicts with Python string formatting
@@ -69,10 +89,12 @@ class SSA(Format):
 
             # Add a temporary special character for SSA closing curly brackets
             for index in ssa_closing_brackets_indices:
-                self.format_dictionary['comments']['format'] = self.format_dictionary['comments']['format'][:index] + SSA.SPECIAL + \
+                self.format_dictionary['comments']['format'] = self.format_dictionary['comments']['format'][
+                                                               :index] + SSA.SPECIAL + \
                                                                self.format_dictionary['comments']['format'][index + 1:]
 
-            self.format_dictionary['comments']['format'] = self.format_dictionary['comments']['format'].replace('{\\', SSA.OPEN).replace(
+            self.format_dictionary['comments']['format'] = self.format_dictionary['comments']['format'].replace('{\\',
+                                                                                                                SSA.OPEN).replace(
                 SSA.SPECIAL, SSA.CLOSE)
 
             # Format comment
@@ -85,8 +107,8 @@ class SSA(Format):
             comment_text = comment_text.replace('\\c&#', '\\c&H').replace('\\c&H#', '\\c&H')
 
             dialogue: dict = {
-                'start': str(start)[:-4],
-                'end': str(end)[:-4],
+                'start': SSA.format_timestamp(start),
+                'end': SSA.format_timestamp(end),
                 'comment': comment_text
             }
             dialogue.update(comment.data)

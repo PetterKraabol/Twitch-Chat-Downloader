@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import re
 import os
 from pathlib import Path
 
@@ -16,26 +17,31 @@ def main() -> None:
     if Arguments().formats:
         for format_name in [f for f in Settings().config['formats'] if f not in ['all']]:
             format_dictionary = Settings().config['formats'][format_name]
+            print(f'[{format_name}]')
             if 'comments' in format_dictionary:
-                print('\tcomment: {}'.format(Settings().config['formats'][format_name]['comments']['format']))
+                print('comment: {}'.format(Settings().config['formats'][format_name]['comments']['format']))
             if 'output' in format_dictionary:
-                print('\toutput: {}'.format(Settings().config['formats'][format_name]['output']['format']))
+                print('output: {}'.format(Settings().config['formats'][format_name]['output']['format']))
             print('\n')
+
+        exit(1)
 
     # Download
     downloader = Downloader()
     if Arguments().video:
-        downloader.videos([Arguments().video])
+        downloader.videos([int(video_id) for video_id in Arguments().video.split(',')])
     elif Arguments().channel:
+        print('Got here!!!')
+        print(Arguments().channel)
         downloader.channel(Arguments().channel)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Twitch Chat Downloader')
-    parser.add_argument('-v', '--video', type=str, help='Video ID')
+    parser.add_argument('-v', '--video', type=str, help='Video IDs separated by commas')
     parser.add_argument('-c', '--channel', type=str, help='Channel name')
-    parser.add_argument('--limit', type=int, default=5, help='Number of videos from channel')
-    parser.add_argument('--client_id', '--', type=str, help='Twitch client ID')
+    parser.add_argument('--first', type=int, default=5, help='Use the first n videos from channel')
+    parser.add_argument('--client-id', type=str, help='Twitch client ID')
     parser.add_argument('--verbose', action='store_true', help='Verbose output')
     parser.add_argument('-q', '--quiet', action='store_true')
     parser.add_argument('-o', '--output', type=str, help='Output folder', default='./output')

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e3fc214df40ca53fe36b6711472078254e56e49642947dbaa9279b2d9520273b"
+            "sha256": "be76795689cba13fc316d2faf2bc9d3f225cbff18085954bd78c77451fe39b7e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,10 +18,10 @@
     "default": {
         "certifi": {
             "hashes": [
-                "sha256:47f9c83ef4c0c621eaef743f133f09fa8a74a9b75f037e8624f83bd1b6626cb7",
-                "sha256:993f830721089fef441cdfeb4b2c8c9df86f0c63239f06bd025a76a7daddb033"
+                "sha256:59b7658e26ca9c7339e00f8f4636cdfe59d34fa37b9b04f6f9e9926b3cece1a5",
+                "sha256:b26104d6835d1f5e49452a26eb2ff87fe7090b89dfcaee5ea2212697e1e1d7ae"
             ],
-            "version": "==2018.11.29"
+            "version": "==2019.3.9"
         },
         "chardet": {
             "hashes": [
@@ -39,11 +39,11 @@
         },
         "python-dateutil": {
             "hashes": [
-                "sha256:063df5763652e21de43de7d9e00ccf239f953a832941e37be541614732cdfc93",
-                "sha256:88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02"
+                "sha256:7e6584c74aeed623791615e26efd690f29817a27c73085b78e4bad02493df2fb",
+                "sha256:c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"
             ],
             "index": "pypi",
-            "version": "==2.7.5"
+            "version": "==2.8.0"
         },
         "pytz": {
             "hashes": [
@@ -77,11 +77,11 @@
         },
         "twitch-python": {
             "hashes": [
-                "sha256:5d9c33e0a04c23a9b209922f1e05f5dc1ae9b80952ce01badf09a192b80b0d63",
-                "sha256:634078b149ca2a51295e93abd85b78ad214f0db6e63459b93908ddd670ea86e8"
+                "sha256:ba1436bf8b58207742f85dc93181db40b3b69bce16cd6f1a5abbdbd5edf42326",
+                "sha256:fe2fed043b1d2fbc9b9a4022a662a09fa4a8d9e957e0109ab99be8f28cc50354"
             ],
             "index": "pypi",
-            "version": "==0.0.8"
+            "version": "==0.0.11"
         },
         "urllib3": {
             "hashes": [
