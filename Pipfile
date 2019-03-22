@@ -6,10 +6,12 @@ name = "pypi"
 [packages]
 requests = "*"
 python-dateutil = "*"
-pytz = "*"
-twitch-python = "*"
+pytz = ">=2018.9"
+twitch-python = ">=0.0.11"
 
 [dev-packages]
+wheel = "*"
+twine = "*"
 
 [requires]
 python_version = "3.7"

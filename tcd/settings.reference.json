@@ -10,10 +10,11 @@
                 "format": "[{timestamp[relative]}] <{commenter[display_name]}> {message[body]}",
                 "timestamp": {
                     "relative": "%X"
-                }
+                },
+                "ignore_new_messages": false
             },
             "output": {
-                "format": "{channel[name]}/{_id}.txt",
+                "format": "{id}.txt",
                 "timestamp": {
                     "absolute": "%x"
                 }
@@ -40,12 +41,12 @@
                 }
             },
             "output": {
-                "format": "{channel[name]}/{_id}.log"
+                "format": "{id}.log"
             }
         },
         "json": {
             "output": {
-                "format": "{channel[name]}/{_id}.json"
+                "format": "{id}.json"
             }
         },
         "srt": {
@@ -54,7 +55,7 @@
             },
             "duration": 2000,
             "output": {
-                "format": "{channel[name]}/{_id}.srt"
+                "format": "{id}.srt"
             }
         },
         "ssa": {
@@ -70,7 +71,7 @@
             "fonts": "",
             "graphics": "",
             "output": {
-                "format": "{channel[name]}/{_id}.ssa",
+                "format": "{id}.ssa",
                 "timestamp": {
                     "absolute": "%x"
                 }
@@ -85,6 +86,5 @@
             }
         }
     },
-    "twitch_api": "https://api.twitch.tv/v5/{path}",
-    "version": "2.0.10"
+    "version": "3.0.1"
 }
