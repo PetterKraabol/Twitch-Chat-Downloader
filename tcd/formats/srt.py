@@ -27,8 +27,8 @@ class SRT(Format):
     @staticmethod
     def format_timestamp(time: datetime.timedelta) -> str:
         """
-        Convert timedelta to h:mm:ss.cc
-        https://www.matroska.org/technical/specs/subtitles/ssa.html
+        Convert timedelta to hh:mm:ss.mmm
+        https://matroska.org/technical/specs/subtitles/srt.html
 
         :param time: Timedelta
         :return: Formatted time string
@@ -42,7 +42,7 @@ class SRT(Format):
         seconds = int(seconds)
         hours += days * 24
 
-        return f'{int(hours):01d}:{int(minutes):02d}:{int(seconds):02d},{milliseconds:03d}'
+        return f'{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d},{milliseconds:03d}'
 
     def subtitles(self, comments: twitch.v5.Comments) -> Generator[Tuple[str, twitch.v5.Comment], None, None]:
         """
