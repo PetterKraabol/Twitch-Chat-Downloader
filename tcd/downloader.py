@@ -8,11 +8,11 @@ from typing import List
 import dateutil
 import twitch
 
-from app.arguments import Arguments
-from app.formatter import Formatter
-from app.logger import Logger, Log
-from app.pipe import Pipe
-from app.settings import Settings
+from .arguments import Arguments
+from .formatter import Formatter
+from .logger import Logger, Log
+from .pipe import Pipe
+from .settings import Settings
 
 
 class Downloader:
@@ -99,7 +99,7 @@ class Downloader:
                 data['comments'].append(comment.data)
 
                 # Ignore comments that were posted after the VOD finished
-                if Settings().config['formats']['json']['comments'].get('ignore_new_comments', False):
+                if Settings().config['formats']['json'].get('comments', {}).get('ignore_new_comments', False):
                     comment_date = dateutil.parser.parse(comment.created_at)
                     vod_finish_date = dateutil.parser.parse(video.created_at) + video_duration
 
@@ -130,7 +130,7 @@ class Downloader:
                 for formatted_comment, comment in comment_tuple:
 
                     # Ignore comments that were posted after the VOD finished
-                    if Settings().config['formats'][format_name]['comments'].get('ignore_new_comments', False):
+                    if Settings().config['formats'][format_name].get('comments', {}).get('ignore_new_comments', False):
                         comment_date = dateutil.parser.parse(comment.created_at)
                         vod_finish_date = dateutil.parser.parse(video.created_at) + video_duration
 
@@ -147,7 +147,7 @@ class Downloader:
                     Logger().log(formatted_comment, Log.PREVIEW)
 
                     # Write comment to file
-                    file.write(f'{formatted_comment}')
+                    file.write('{}\n'.format(formatted_comment))
 
             Logger().log('[{}] {}'.format(format_name, output))
 

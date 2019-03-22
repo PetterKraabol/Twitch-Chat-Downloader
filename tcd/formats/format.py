@@ -1,6 +1,6 @@
 import twitch
 
-from app.settings import Settings
+from tcd.settings import Settings
 
 
 class Format:

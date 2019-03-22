@@ -1,8 +1,8 @@
 import time
 from typing import List
 
-from app.arguments import Arguments
-from app.singleton import Singleton
+from .arguments import Arguments
+from .singleton import Singleton
 
 
 class Log:
@@ -75,7 +75,7 @@ class Logger(metaclass=Singleton):
             return False
 
         # Progress - default output
-        if log_type == Log.PROGRESS and not (Arguments().debug or Arguments().verbose or Arguments().preview):
+        if log_type == Log.PROGRESS and (Arguments().debug or Arguments().verbose or Arguments().preview):
             return False
 
         # Debug

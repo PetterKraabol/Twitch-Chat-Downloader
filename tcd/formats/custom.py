@@ -2,8 +2,8 @@ from typing import Generator, Tuple
 
 import twitch
 
-from app.formats.format import Format
-from app.pipe import Pipe
+from tcd.formats.format import Format
+from tcd.pipe import Pipe
 
 
 class Custom(Format):

@@ -4,9 +4,9 @@ from typing import Tuple, Generator, List, Optional
 
 import twitch
 
-from app.formats.format import Format
-from app.pipe import Pipe
-from app.safedict import SafeDict
+from tcd.formats.format import Format
+from tcd.pipe import Pipe
+from tcd.safedict import SafeDict
 
 
 class SSA(Format):

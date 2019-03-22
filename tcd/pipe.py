@@ -6,8 +6,8 @@ from typing import List, Optional
 import dateutil.parser
 from pytz import timezone
 
-from app.arguments import Arguments
-from app.safedict import SafeDict
+from .arguments import Arguments
+from .safedict import SafeDict
 
 
 class Pipe:

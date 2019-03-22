@@ -2,19 +2,16 @@ from typing import Generator, Tuple
 
 import twitch
 
-from app.formats.custom import Custom
-from app.formats.srt import SRT
-from app.formats.ssa import SSA
-from app.settings import Settings
+from .formats.custom import Custom
+from .formats.srt import SRT
+from .formats.ssa import SSA
+from .settings import Settings
 
 
 class Formatter:
 
     def __init__(self, video: twitch.helix.Video):
         self.video: twitch.helix.Video = video
-
-    def output(self, format_name: str) -> str:
-        pass
 
     def use(self, format_name: str) -> Tuple[Generator[Tuple[str, twitch.v5.Comment], None, None], str]:
         """
