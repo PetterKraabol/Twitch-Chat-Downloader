@@ -4,7 +4,7 @@
 
 `pip install tcd`
 
-A neat Python script to download chat messages from past broadcasts.
+A neat tool to download chat messages from past broadcasts.
 
 ### Requirements
 
