@@ -39,7 +39,7 @@ class Settings(metaclass=Singleton):
 
         # Create settings file from reference file if necessary
         if not self.filepath.exists():
-            self.directory.mkdir(exist_ok=True)
+            self.directory.mkdir(parents=True, exist_ok=True)
 
             # Missing reference file
             if not self.reference_filepath.exists():
