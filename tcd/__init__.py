@@ -18,7 +18,7 @@ def main():
     parser.add_argument('-v', f'--{Arguments.Name.VIDEO}', type=str, help='Video IDs separated by commas')
     parser.add_argument('-c', f'--{Arguments.Name.CHANNEL}', type=str, help='Channel names separated by commas')
     parser.add_argument(f'--{Arguments.Name.FIRST}', type=int, default=5, help='Download chat from the last n VODs')
-    parser.add_argument(f'--{Arguments.Name.CLIENT_ID}', type=str, help='Twitch client ID')
+    parser.add_argument(f'--{Arguments.Name.CLIENT_ID.replace("_", "-")}', type=str, help='Twitch client ID')
     parser.add_argument(f'--{Arguments.Name.VERBOSE}', action='store_true', help='Verbose output')
     parser.add_argument('-q', f'--{Arguments.Name.QUIET}', action='store_true')
     parser.add_argument('-o', f'--{Arguments.Name.OUTPUT}', type=str, help='Output directory', default='./')
@@ -28,7 +28,8 @@ def main():
     parser.add_argument(f'--{Arguments.Name.VERSION}', action='store_true', help='Settings version')
     parser.add_argument(f'--{Arguments.Name.FORMATS}', action='store_true', help='List available formats')
     parser.add_argument(f'--{Arguments.Name.PREVIEW}', action='store_true', help='Preview output')
-    parser.add_argument(f'--{Arguments.Name.SETTINGS_FILE}', type=str,
+    parser.add_argument(f'--{Arguments.Name.SETTINGS}', action='store_true', help='Preview output')
+    parser.add_argument(f'--{Arguments.Name.SETTINGS_FILE.replace("_", "-")}', type=str,
                         default=str(Path.home()) + '/.config/tcd/settings.json',
                         help='Settings file location')
     parser.add_argument(f'--{Arguments.Name.DEBUG}', action='store_true', help='Print debug messages')
@@ -40,6 +41,11 @@ def main():
     # Print version number
     if Arguments().print_version:
         Logger().log('Twitch Chat Downloader {}'.format(Settings().config.get('version', '')), retain=False)
+        return
+
+    # Print settings file location
+    if Arguments().settings:
+        Logger().log(str(Settings().filepath))
         return
 
     # Client ID

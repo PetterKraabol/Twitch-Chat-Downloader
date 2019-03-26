@@ -9,7 +9,8 @@ class Arguments(metaclass=Singleton):
     """
 
     class Name:
-        SETTINGS_FILE: str = 'settings'
+        SETTINGS_FILE: str = 'settings_file'
+        SETTINGS: str = 'settings'
         INIT: str = 'init'
         VERBOSE: str = 'verbose'
         QUIET: str = 'quiet'
@@ -37,6 +38,7 @@ class Arguments(metaclass=Singleton):
 
         # Required arguments and booleans
         self.settings_file: str = arguments[Arguments.Name.SETTINGS_FILE]
+        self.settings: str = arguments[Arguments.Name.SETTINGS]
         self.init: bool = arguments[Arguments.Name.INIT]
         self.verbose: bool = arguments[Arguments.Name.VERBOSE]
         self.debug: bool = arguments[Arguments.Name.DEBUG]
