@@ -9,12 +9,13 @@ from .logger import Logger, Log
 from .settings import Settings
 
 __name__: str = 'tcd'
+__version__: str = '3.0.5'
 __all__: List[Any] = [Arguments, Settings, Downloader, Logger, Log]
 
 
 def main():
     # Arguments
-    parser = argparse.ArgumentParser(description='Twitch Chat Downloader')
+    parser = argparse.ArgumentParser(description=f'Twitch Chat Downloader {__version__}')
     parser.add_argument('-v', f'--{Arguments.Name.VIDEO}', type=str, help='Video IDs separated by commas')
     parser.add_argument('-c', f'--{Arguments.Name.CHANNEL}', type=str, help='Channel names separated by commas')
     parser.add_argument(f'--{Arguments.Name.FIRST}', type=int, default=5, help='Download chat from the last n VODs')
@@ -40,7 +41,7 @@ def main():
 
     # Print version number
     if Arguments().print_version:
-        Logger().log('Twitch Chat Downloader {}'.format(Settings().config.get('version', '')), retain=False)
+        Logger().log(f'Twitch Chat Downloader {__version__}', retain=False)
         return
 
     # Print settings file location
