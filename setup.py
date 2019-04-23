@@ -44,7 +44,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/PetterKraabol/Twitch-Chat-Downloader',
-    package_data={'tcd': ['settings.reference.json']},
-    version='3.0.3',
+    version='3.0.4',
     zip_safe=True,
 )

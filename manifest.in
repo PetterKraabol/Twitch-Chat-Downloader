@@ -1,0 +1,1 @@
+include tcd/settings.reference.json readme.md license Pipfile Pipfile.lock
