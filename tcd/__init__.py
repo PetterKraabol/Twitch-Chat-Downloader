@@ -1,7 +1,7 @@
 import argparse
 import os
 from pathlib import Path
-from typing import List, Any
+from typing import List, Callable
 
 from .arguments import Arguments
 from .downloader import Downloader
@@ -9,8 +9,8 @@ from .logger import Logger, Log
 from .settings import Settings
 
 __name__: str = 'tcd'
-__version__: str = '3.0.5'
-__all__: List[Any] = [Arguments, Settings, Downloader, Logger, Log]
+__version__: str = '3.0.6'
+__all__: List[Callable] = [Arguments, Settings, Downloader, Logger, Log]
 
 
 def main():

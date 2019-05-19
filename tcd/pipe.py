@@ -22,7 +22,7 @@ class Pipe:
         :param format_dictionary: Comment format
         """
         self.format_dictionary: dict = format_dictionary
-        self.valid_directory_characters: str = "-_.() %s%s" % (string.ascii_letters, string.digits)
+        self.valid_directory_characters: str = f'-_.() {string.ascii_letters}{string.digits}'
 
         # Combine regular format and action_format if provided.
         self.combined_formats: str = ''
@@ -37,7 +37,6 @@ class Pipe:
         :param data: Input data
         :return:
         """
-        self.filter(data)
         self.mapper(data)
 
         return self.reduce(data)
@@ -56,7 +55,7 @@ class Pipe:
         :param video_data: Video data
         :return: Output string
         """
-        output_string = self.format(video_data)
+        output_string = ''.join(c for c in self.format(video_data) if c in self.valid_directory_characters)
         return '{}/{}'.format(Arguments().output.rstrip('/').rstrip('\\'), output_string)
 
     @staticmethod
@@ -105,17 +104,6 @@ class Pipe:
             except TypeError:
                 print('Invalid format in settings file:', self.format_dictionary['format'])
                 exit(1)
-
-    def filter(self, data: dict) -> dict:
-        """
-        Remove or clean data
-        :param data: Input data
-        :return: Data (input data is muted)
-        """
-        if '{title}' in self.combined_formats:
-            data['title'] = ''.join(c for c in data['title'] if c in self.valid_directory_characters)
-
-        return data
 
     def mapper(self, data: dict) -> dict:
         """
