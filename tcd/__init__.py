@@ -9,7 +9,7 @@ from .logger import Logger, Log
 from .settings import Settings
 
 __name__: str = 'tcd'
-__version__: str = '3.0.6'
+__version__: str = '3.0.7'
 __all__: List[Callable] = [Arguments, Settings, Downloader, Logger, Log]
 
 
