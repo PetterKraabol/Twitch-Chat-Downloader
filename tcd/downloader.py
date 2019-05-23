@@ -6,7 +6,8 @@ import sys
 from typing import List
 
 import dateutil
-import twitch
+from twitch import Helix
+from twitch.helix import Video
 
 from .arguments import Arguments
 from .formatter import Formatter
@@ -18,7 +19,7 @@ from .settings import Settings
 class Downloader:
 
     def __init__(self):
-        self.helix_api = twitch.Helix(client_id=Settings().config['client_id'], use_cache=True)
+        self.helix_api = Helix(client_id=Settings().config['client_id'], use_cache=True)
 
         self.formats: List[str] = []
         self.whitelist: List[str] = []
@@ -64,7 +65,7 @@ class Downloader:
 
         return True
 
-    def video(self, video: twitch.helix.Video) -> None:
+    def video(self, video: Video) -> None:
         """
         Download chat from video
         :param video: Video object

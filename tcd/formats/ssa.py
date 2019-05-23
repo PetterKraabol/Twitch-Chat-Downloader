@@ -2,7 +2,8 @@ import datetime
 from itertools import chain
 from typing import Tuple, Generator, List, Optional
 
-import twitch
+from twitch.helix import Video
+from twitch.v5 import Comment, Comments
 
 from tcd.formats.format import Format
 from tcd.pipe import Pipe
@@ -14,10 +15,10 @@ class SSA(Format):
     CLOSE: str = '[SSA_CLOSE]'
     SPECIAL: str = '♣'
 
-    def __init__(self, video: twitch.helix.Video):
+    def __init__(self, video: Video):
         super().__init__(video, format_name='ssa')
 
-    def use(self) -> Tuple[Generator[Tuple[str, twitch.v5.Comment], None, None], str]:
+    def use(self) -> Tuple[Generator[Tuple[str, Comment], None, None], str]:
         """
         Use SSA format
         :return:
@@ -26,7 +27,7 @@ class SSA(Format):
 
         return self.generator(), output
 
-    def generator(self) -> Generator[Tuple[str, Optional[twitch.v5.Comment]], None, None]:
+    def generator(self) -> Generator[Tuple[str, Optional[Comment]], None, None]:
         """
         Line generator
         :return:
@@ -54,7 +55,7 @@ class SSA(Format):
 
         return f'{int(hours):01d}:{int(minutes):02d}:{int(seconds):02d}.{centiseconds:02d}'
 
-    def dialogues(self, comments: twitch.v5.Comments) -> Generator[Tuple[str, twitch.v5.Comments], None, None]:
+    def dialogues(self, comments: Comments) -> Generator[Tuple[str, Comments], None, None]:
         """
         Format comments as SSA dialogues
         :param comments: Comment to format

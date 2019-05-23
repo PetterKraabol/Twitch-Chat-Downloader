@@ -1,7 +1,8 @@
 import datetime
 from typing import Tuple, Generator
 
-import twitch
+from twitch.helix import Video
+from twitch.v5 import Comment, Comments
 
 from tcd.formats.format import Format
 from tcd.pipe import Pipe
@@ -10,14 +11,14 @@ from tcd.safedict import SafeDict
 
 class SRT(Format):
 
-    def __init__(self, video: twitch.helix.Video):
+    def __init__(self, video: Video):
         """
         Initialize SRT format
         :param video: Video object
         """
         super().__init__(video, format_name='srt')
 
-    def use(self) -> Tuple[Generator[Tuple[str, twitch.v5.Comment], None, None], str]:
+    def use(self) -> Tuple[Generator[Tuple[str, Comment], None, None], str]:
         """
         Use SRT format
         :return: Comment generator and output string
@@ -44,7 +45,7 @@ class SRT(Format):
 
         return f'{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d},{milliseconds:03d}'
 
-    def subtitles(self, comments: twitch.v5.Comments) -> Generator[Tuple[str, twitch.v5.Comment], None, None]:
+    def subtitles(self, comments: Comments) -> Generator[Tuple[str, Comment], None, None]:
         """
         Subtitle generator
         :param comments: Comments to turn into subtitles

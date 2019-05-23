@@ -1,6 +1,7 @@
 from typing import Generator, Tuple
 
-import twitch
+from twitch.helix import Video
+from twitch.v5 import Comment
 
 from .formats.custom import Custom
 from .formats.srt import SRT
@@ -10,10 +11,10 @@ from .settings import Settings
 
 class Formatter:
 
-    def __init__(self, video: twitch.helix.Video):
-        self.video: twitch.helix.Video = video
+    def __init__(self, video: Video):
+        self.video: Video = video
 
-    def use(self, format_name: str) -> Tuple[Generator[Tuple[str, twitch.v5.Comment], None, None], str]:
+    def use(self, format_name: str) -> Tuple[Generator[Tuple[str, Comment], None, None], str]:
         """
         Use format
         :param format_name:
