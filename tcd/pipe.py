@@ -55,7 +55,8 @@ class Pipe:
         :param video_data: Video data
         :return: Output string
         """
-        output_string = ''.join(c for c in self.format(video_data) if c in self.valid_directory_characters)
+        video_data['title'] = ''.join(c for c in video_data['title'] if c in self.valid_directory_characters)
+        output_string = ''.join(c for c in self.format(video_data) if c in self.valid_directory_characters + '/')
         return '{}/{}'.format(Arguments().output.rstrip('/').rstrip('\\'), output_string)
 
     @staticmethod
