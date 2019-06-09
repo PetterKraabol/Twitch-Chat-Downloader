@@ -26,7 +26,7 @@ def main():
     parser.add_argument('-o', f'--{Arguments.Name.OUTPUT}', type=str, help='Output directory', default='./')
     parser.add_argument('-f', f'--{Arguments.Name.FORMAT}', type=str, help='Message format', default='default')
     parser.add_argument(f'--{Arguments.Name.TIMEZONE}', type=str, help='Timezone name')
-    parser.add_argument(f'--includes', type=str, help='Download messages includes specified text')
+    parser.add_argument(f'--includes', type=str, help='Messages must include specified text')
     parser.add_argument(f'--{Arguments.Name.INIT}', action='store_true', help='Script setup')
     parser.add_argument(f'--{Arguments.Name.VERSION}', action='store_true', help='Settings version')
     parser.add_argument(f'--{Arguments.Name.FORMATS}', action='store_true', help='List available formats')
