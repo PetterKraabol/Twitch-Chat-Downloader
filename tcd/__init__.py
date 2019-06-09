@@ -9,7 +9,7 @@ from .logger import Logger, Log
 from .settings import Settings
 
 __name__: str = 'tcd'
-__version__: str = '3.0.9'
+__version__: str = '3.1.0'
 __all__: List[Callable] = [Arguments, Settings, Downloader, Logger, Log]
 
 
@@ -18,6 +18,7 @@ def main():
     parser = argparse.ArgumentParser(description=f'Twitch Chat Downloader {__version__}')
     parser.add_argument('-v', f'--{Arguments.Name.VIDEO}', type=str, help='Video IDs separated by commas')
     parser.add_argument('-c', f'--{Arguments.Name.CHANNEL}', type=str, help='Channel names separated by commas')
+    parser.add_argument('-u', f'--{Arguments.Name.USER}', type=str, help='Messages from users, separated by commas')
     parser.add_argument(f'--{Arguments.Name.FIRST}', type=int, default=5, help='Download chat from the last n VODs')
     parser.add_argument(f'--{Arguments.Name.CLIENT_ID.replace("_", "-")}', type=str, help='Twitch client ID')
     parser.add_argument(f'--{Arguments.Name.VERBOSE}', action='store_true', help='Verbose output')
@@ -25,6 +26,7 @@ def main():
     parser.add_argument('-o', f'--{Arguments.Name.OUTPUT}', type=str, help='Output directory', default='./')
     parser.add_argument('-f', f'--{Arguments.Name.FORMAT}', type=str, help='Message format', default='default')
     parser.add_argument(f'--{Arguments.Name.TIMEZONE}', type=str, help='Timezone name')
+    parser.add_argument(f'--includes', type=str, help='Download messages includes specified text')
     parser.add_argument(f'--{Arguments.Name.INIT}', action='store_true', help='Script setup')
     parser.add_argument(f'--{Arguments.Name.VERSION}', action='store_true', help='Settings version')
     parser.add_argument(f'--{Arguments.Name.FORMATS}', action='store_true', help='List available formats')

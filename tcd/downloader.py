@@ -97,6 +97,16 @@ class Downloader:
             }
 
             for comment in video.comments():
+
+                # Skip unspecified users if a list is provided.
+                if Arguments().users and comment.commenter.name.lower() not in Arguments().users:
+                    continue
+
+                # If specified, only include messages that include a specified string
+                if Arguments().includes and Arguments().includes not in comment.message.body.lower():
+                    continue
+
+                # Add comment to dictionary
                 data['comments'].append(comment.data)
 
                 # Ignore comments that were posted after the VOD finished
@@ -129,6 +139,14 @@ class Downloader:
 
                 # For every comment in video
                 for formatted_comment, comment in comment_tuple:
+
+                    # Skip unspecified users if a list is provided.
+                    if Arguments().users and comment.commenter.name.lower() not in Arguments().users:
+                        continue
+
+                    # If specified, only include messages that include a specified string
+                    if Arguments().includes and Arguments().includes.lower() not in comment.message.body.lower():
+                        continue
 
                     # Ignore comments that were posted after the VOD finished
                     if Settings().config['formats'][format_name].get('comments', {}).get('ignore_new_comments', False):

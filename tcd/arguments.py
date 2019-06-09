@@ -20,6 +20,8 @@ class Arguments(metaclass=Singleton):
         OUTPUT: str = 'output'
         CLIENT_ID: str = 'client_id'
         CHANNEL: str = 'channel'
+        USER: str = 'user'
+        INCLUDES: str = 'includes'
         FIRST: str = 'first'
         VIDEO: str = 'video'
         FORMAT: str = 'format'
@@ -52,11 +54,13 @@ class Arguments(metaclass=Singleton):
         self.client_id: Optional[str] = arguments[Arguments.Name.CLIENT_ID]
         self.first: Optional[int] = arguments[Arguments.Name.FIRST]
         self.timezone: Optional[str] = arguments[Arguments.Name.TIMEZONE]
+        self.includes: Optional[str] = arguments[Arguments.Name.INCLUDES]
 
         # Arguments that require some formatting
         self.video_ids: List[int] = []
         self.formats: List[str] = []
         self.channels: List[str] = []
+        self.users: List[str] = []
 
         if arguments[Arguments.Name.VIDEO]:
             self.video_ids = [int(video_id) for video_id in arguments[Arguments.Name.VIDEO].lower().split(',')]
@@ -66,3 +70,6 @@ class Arguments(metaclass=Singleton):
 
         if arguments[Arguments.Name.CHANNEL]:
             self.channels = arguments[Arguments.Name.CHANNEL].lower().split(',')
+
+        if arguments[Arguments.Name.USER]:
+            self.users = arguments[Arguments.Name.USER].lower().split(',')
