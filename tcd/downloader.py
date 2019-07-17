@@ -96,7 +96,7 @@ class Downloader:
                 'comments': []
             }
 
-            for comment in video.comments():
+            for comment in video.comments:
 
                 # Skip unspecified users if a list is provided.
                 if Arguments().users and comment.commenter.name.lower() not in Arguments().users:

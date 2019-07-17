@@ -32,7 +32,7 @@ class SSA(Format):
         Line generator
         :return:
         """
-        for line in chain(self.prefix(), self.dialogues(self.video.comments())):
+        for line in chain(self.prefix(), self.dialogues(self.video.comments)):
             yield line
 
     @staticmethod

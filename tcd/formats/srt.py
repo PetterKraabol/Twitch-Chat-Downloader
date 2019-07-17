@@ -23,7 +23,7 @@ class SRT(Format):
         Use SRT format
         :return: Comment generator and output string
         """
-        return self.subtitles(self.video.comments()), Pipe(self.format_dictionary['output']).output(self.video.data)
+        return self.subtitles(self.video.comments), Pipe(self.format_dictionary['output']).output(self.video.data)
 
     @staticmethod
     def format_timestamp(time: datetime.timedelta) -> str:

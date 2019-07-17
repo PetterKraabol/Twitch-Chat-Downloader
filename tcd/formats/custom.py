@@ -18,7 +18,7 @@ class Custom(Format):
         :return: tuple(formatted comment, comment), output format
         """
         # Format comments
-        comments = self.comment_generator(self.video.comments())
+        comments = self.comment_generator(self.video.comments)
 
         # Format output
         output: str = Pipe(self.format_dictionary['output']).output(self.video.data)
