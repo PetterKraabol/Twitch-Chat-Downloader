@@ -1,5 +1,5 @@
 import hashlib
-import string
+import re
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any
 
@@ -22,7 +22,6 @@ class Pipe:
         :param format_dictionary: Comment format
         """
         self.format_dictionary: Dict[str, Any] = format_dictionary
-        self.valid_directory_characters: str = f'-_.() {string.ascii_letters}{string.digits}'
 
         # Combine regular format and action_format if provided.
         self.combined_formats: str = ''
@@ -55,9 +54,23 @@ class Pipe:
         :param video_data: Video data
         :return: Output string
         """
-        video_data['title'] = ''.join(c for c in video_data['title'] if c in self.valid_directory_characters)
-        output_string = ''.join(c for c in self.format(video_data) if c in self.valid_directory_characters + '/')
+
+        # Video title
+        video_data['title'] = Pipe.get_valid_filename(video_data['title'])
+
+        # Output directory and file
+        output_string = '/'.join([Pipe.get_valid_filename(s) for s in self.format(video_data).split('/')])
+
         return '{}/{}'.format(Arguments().output.rstrip('/').rstrip('\\'), output_string)
+
+    @staticmethod
+    def get_valid_filename(string: str) -> str:
+        """
+        Strip invalid filename characters from value.
+        :param string: Filename with potentially invalid characters
+        :return: Valid filename
+        """
+        return re.sub(r'(?u)[^-\w.]', '', string.strip().replace(' ', '_'))
 
     @staticmethod
     def timestamp(date_format: str, date_value: str, timezone_name: Optional[str] = None) -> str:
