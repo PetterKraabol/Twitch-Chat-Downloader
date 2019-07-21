@@ -1,7 +1,7 @@
 import hashlib
 import string
 from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
 import dateutil.parser
 from pytz import timezone
@@ -16,12 +16,12 @@ class Pipe:
     format data into comment and output file strings
     """
 
-    def __init__(self, format_dictionary: dict):
+    def __init__(self, format_dictionary: Dict[str, Any]):
         """
         Pipe
         :param format_dictionary: Comment format
         """
-        self.format_dictionary: dict = format_dictionary
+        self.format_dictionary: Dict[str, Any] = format_dictionary
         self.valid_directory_characters: str = f'-_.() {string.ascii_letters}{string.digits}'
 
         # Combine regular format and action_format if provided.
@@ -31,7 +31,7 @@ class Pipe:
         if 'action_format' in self.format_dictionary:
             self.combined_formats += self.format_dictionary['action_format']
 
-    def format(self, data: dict) -> str:
+    def format(self, data: Dict[str, Any]) -> str:
         """
         Format comment
         :param data: Input data
@@ -41,7 +41,7 @@ class Pipe:
 
         return self.reduce(data)
 
-    def comment(self, comment_data: dict) -> str:
+    def comment(self, comment_data: Dict[str, Any]) -> str:
         """
         Format comment data to string
         :param comment_data: Comment data
@@ -49,7 +49,7 @@ class Pipe:
         """
         return self.format(comment_data)
 
-    def output(self, video_data: dict) -> str:
+    def output(self, video_data: Dict[str, Any]) -> str:
         """
         Format output path from data
         :param video_data: Video data
@@ -106,14 +106,19 @@ class Pipe:
                 print('Invalid format in settings file:', self.format_dictionary['format'])
                 exit(1)
 
-    def mapper(self, data: dict) -> dict:
+    def mapper(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Make custom changes to the input data according to the format dictionary
         :param data: Input data
         :return: Data (input data dict is mutated)
         """
+        self._map_timestamps(data)
+        self._map_user_colors(data)
+        self._map_user_badges(data)
 
-        # Timestamps
+        return data
+
+    def _map_timestamps(self, data: Dict[str, Any]):
         if 'timestamp' in self.format_dictionary and '{timestamp' in self.combined_formats:
 
             data['timestamp'] = {}
@@ -146,7 +151,7 @@ class Pipe:
                 data['timestamp']['relative'] = self.timestamp_relative(
                     float(data['content_offset_seconds']))
 
-        # User colors
+    def _map_user_colors(self, data: Dict[str, Any]):
         if 'message' in data:
 
             # Set color
@@ -176,7 +181,7 @@ class Pipe:
                     g=data['message']['user_color'][3:5],
                     r=data['message']['user_color'][1:3])
 
-        # User badges
+    def _map_user_badges(self, data: Dict[str, Any]):
         # The Twitch API returns an array of badges, ordered by their importance (descending).
         if '{commenter[badge]}' in self.combined_formats and 'message' in data:
 
@@ -218,5 +223,3 @@ class Pipe:
                     if badge != '':
                         data['commenter']['badge'] = badge
                         break
-
-        return data
