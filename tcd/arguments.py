@@ -27,6 +27,7 @@ class Arguments(metaclass=Singleton):
         FORMAT: str = 'format'
         TIMEZONE: str = 'timezone'
         DEBUG: str = 'debug'
+        LOG: str = 'log'
 
     def __init__(self, arguments: Optional[Dict[str, Union[str, bool, int]]] = None):
         """
@@ -49,6 +50,7 @@ class Arguments(metaclass=Singleton):
         self.print_formats: bool = arguments[Arguments.Name.FORMATS]
         self.print_version: bool = arguments[Arguments.Name.VERSION]
         self.output: str = arguments[Arguments.Name.OUTPUT]
+        self.log: bool = arguments[Arguments.Name.LOG]
 
         # Optional or prompted arguments
         self.client_id: Optional[str] = arguments[Arguments.Name.CLIENT_ID]

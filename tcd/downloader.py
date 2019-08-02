@@ -88,6 +88,7 @@ class Downloader:
         # Special case for JSON
         # Build JSON object before writing it
         if 'json' in self.formats:
+            Logger().log('Downloading JSON data', Log.VERBOSE)
             output: str = Pipe(Settings().config['formats']['json']['output']).output(video.data)
             os.makedirs(os.path.dirname(output), exist_ok=True)
 
@@ -129,6 +130,7 @@ class Downloader:
 
         # For each format (ignore json this time)
         for format_name in [x for x in self.formats if x not in ['json']]:
+            Logger().log(f'Formatting chat using: {format_name}', Log.VERBOSE)
 
             # Get (formatted_comment, comment), output
             comment_tuple, output = formatter.use(format_name)

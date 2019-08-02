@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from typing import List, Optional
 
 from .arguments import Arguments
@@ -15,9 +16,9 @@ class Log:
     PROGRESS: str = 'progress'
 
     def __init__(self, message: str = '', log_type: str = REGULAR):
-        self.message: str = message
+        self.message: str = message.strip()
         self.type: str = log_type
-        self.timestamp: float = time.time()
+        self.timestamp: str = datetime.utcfromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
     def __str__(self) -> str:
         if self.type in [Log.DEBUG, Log.ERROR, Log.CRITICAL]:
@@ -53,6 +54,10 @@ class Logger(metaclass=Singleton):
         if retain and log.type is not Log.PREVIEW:
             self.logs.append(log)
 
+            # Save log when debugging
+            if Arguments().log:
+                self.save()
+
         # Print
         if self.should_print_type(log.type):
             print(log)
@@ -75,7 +80,7 @@ class Logger(metaclass=Singleton):
             return False
 
         # Progress - default output
-        if log_type == Log.PROGRESS and (Arguments().debug or Arguments().verbose or Arguments().preview):
+        if log_type == Log.PROGRESS and (Arguments().verbose or Arguments().preview):
             return False
 
         # Debug

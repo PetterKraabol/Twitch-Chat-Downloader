@@ -36,6 +36,7 @@ def main():
                         default=str(Path.home()) + '/.config/tcd/settings.json',
                         help='Settings file location')
     parser.add_argument(f'--{Arguments.Name.DEBUG}', action='store_true', help='Print debug messages')
+    parser.add_argument(f'--{Arguments.Name.LOG}', action='store_true', help='Save log file')
 
     Arguments(parser.parse_args().__dict__)
     Settings(Arguments().settings_file,
