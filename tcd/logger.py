@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import List, Optional
 
 from .arguments import Arguments
 from .singleton import Singleton
@@ -20,11 +20,8 @@ class Log:
         self.timestamp: float = time.time()
 
     def __str__(self) -> str:
-        if self.type == Log.CRITICAL:
-            return f'[Critical]: {self.message}'
-
-        if self.type == Log.DEBUG:
-            return f'[Debug]: {self.message}'
+        if self.type in [Log.DEBUG, Log.ERROR, Log.CRITICAL]:
+            return f'[{self.type.capitalize()}: {self.message}]'
 
         return self.message
 
@@ -38,10 +35,10 @@ class Log:
 
 class Logger(metaclass=Singleton):
 
-    def __init__(self):
-        self.logs: List[Log] = []
+    def __init__(self, logs: Optional[List[Log]] = None):
+        self.logs: List[Log] = logs or []
 
-    def log(self, message: str = '', log_type: str = Log.REGULAR, retain: bool = True) -> None:
+    def log(self, message: str = '', log_type: str = Log.REGULAR, retain: bool = True) -> Log:
         """
         Log a message
         :param message: Log message
@@ -56,11 +53,14 @@ class Logger(metaclass=Singleton):
         if retain and log.type is not Log.PREVIEW:
             self.logs.append(log)
 
-        if self.should_print(log.type):
+        # Print
+        if self.should_print_type(log.type):
             print(log)
 
+        return log
+
     @staticmethod
-    def should_print(log_type: str) -> bool:
+    def should_print_type(log_type: str) -> bool:
         """
         Check if log should be printed
         :param log_type: Log type

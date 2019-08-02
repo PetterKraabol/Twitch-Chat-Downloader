@@ -62,14 +62,18 @@ class Arguments(metaclass=Singleton):
         self.channels: List[str] = []
         self.users: List[str] = []
 
+        # Videos
         if arguments[Arguments.Name.VIDEO]:
             self.video_ids = [int(video_id) for video_id in arguments[Arguments.Name.VIDEO].lower().split(',')]
 
+        # Formats
         if arguments[Arguments.Name.FORMAT]:
             self.formats: Optional[List[str]] = arguments[Arguments.Name.FORMAT].lower().split(',')
 
+        # Channels
         if arguments[Arguments.Name.CHANNEL]:
             self.channels = arguments[Arguments.Name.CHANNEL].lower().split(',')
 
+        # Users
         if arguments[Arguments.Name.USER]:
             self.users = arguments[Arguments.Name.USER].lower().split(',')

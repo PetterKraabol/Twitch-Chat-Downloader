@@ -117,7 +117,7 @@ class Downloader:
                     if comment_date > vod_finish_date:
                         continue
 
-                if Logger().should_print(Log.PROGRESS):
+                if Logger().should_print_type(Log.PROGRESS):
                     self.draw_progress(current=comment.content_offset_seconds,
                                        end=video_duration.seconds,
                                        description='json')
@@ -157,7 +157,7 @@ class Downloader:
                             continue
 
                     # Draw progress
-                    if comment and Logger().should_print(Log.PROGRESS):
+                    if comment and Logger().should_print_type(Log.PROGRESS):
                         self.draw_progress(current=comment.content_offset_seconds,
                                            end=video_duration.seconds,
                                            description=format_name)

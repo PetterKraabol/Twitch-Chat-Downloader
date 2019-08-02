@@ -8,6 +8,8 @@ from pytz import timezone
 
 from .arguments import Arguments
 from .safedict import SafeDict
+from .settings import Settings
+from .logger import Logger, Log
 
 
 class Pipe:
@@ -70,7 +72,12 @@ class Pipe:
         :param string: Filename with potentially invalid characters
         :return: Valid filename
         """
-        return re.sub(r'(?u)[^-\w.]', '', string.strip().replace(' ', '_'))
+        valid_characters: str = r''+Settings().config.get('valid_filename_regex', r'[^-\w.()\[\]{}@%! ]')
+        try:
+            return re.sub(r'(?u)' + valid_characters, '', string.strip())
+        except re.error:
+            Logger().log(f'Invalid filename regex, check your settings: {valid_characters}', Log.ERROR)
+            exit(1)
 
     @staticmethod
     def timestamp(date_format: str, date_value: str, timezone_name: Optional[str] = None) -> str:

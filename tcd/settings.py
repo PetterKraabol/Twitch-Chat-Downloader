@@ -90,17 +90,25 @@ class Settings(metaclass=Singleton):
         Update configuration settings and file using reference settings.
         :return: None
         """
-        Settings.write(pathlib.Path('{}/settings.{}.backup.json'.format(self.directory, self.config['version'])),
-                       self.config)
+        backup_path = pathlib.Path('{}/settings.{}.backup.json'.format(self.directory, self.config['version']))
+
+        Settings.write(backup_path, self.config)
+
         new_config: dict = self.load(self.reference_filepath)
 
+        Logger().log(f'Updating settings file to v{new_config["version"]}')
+
         # Copy client ID to new config file
+        Logger().log('Transferring client id', Log.VERBOSE)
         new_config['client_id'] = self.config.get('client_id', None)
 
         # Copy user-defined formats to new config file
         for format_name, format_dictionary in dict(self.config['formats']).items():
             if format_name not in new_config['formats']:
                 new_config['formats'][format_name] = format_dictionary
+                Logger().log(f'Transferring format: {format_name}', Log.VERBOSE)
+
+        Logger().log(f'Previous settings have been backed up to {backup_path}')
 
         # Overwrite current config with new
         Settings.write(self.filepath, new_config)
