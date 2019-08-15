@@ -9,7 +9,7 @@ A neat tool to download chat messages from past broadcasts.
 ### Requirements
 
 * [Python 3.7 or newer](https://www.python.org/downloads/)
-* [A Twitch client ID](https://glass.twitch.tv/console/apps)
+* [A Twitch client ID](https://dev.twitch.tv/console/apps)
 
 ### Usage
 
