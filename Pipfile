@@ -7,7 +7,7 @@ name = "pypi"
 requests = "*"
 python-dateutil = "*"
 pytz = ">=2018.9"
-twitch-python = ">=0.0.13"
+twitch-python = ">=0.0.18"
 
 [dev-packages]
 wheel = "*"

@@ -2,17 +2,14 @@
 
 import os
 
-from pipenv.project import Project
-from pipenv.utils import convert_deps_to_pip
 from setuptools import setup, find_packages
 
 this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'readme.md'), encoding='utf-8') as f:
     readme = f.read()
 
-pipfile = Project(chdir=False).parsed_pipfile
-requirements = convert_deps_to_pip(pipfile['packages'], r=False)
-test_requirements = convert_deps_to_pip(pipfile['dev-packages'], r=False)
+requirements = ['requests', 'rx>=3.0.0', 'twitch-python', 'pytz', 'python-dateutil']
+test_requirements = ['twine', 'wheel']
 setup_requirements = ['pipenv', 'setuptools']
 
 setup(
@@ -24,6 +21,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     entry_points=
     '''
@@ -44,6 +42,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/PetterKraabol/Twitch-Chat-Downloader',
-    version='3.1.3',
+    version='3.1.4',
     zip_safe=True,
 )
