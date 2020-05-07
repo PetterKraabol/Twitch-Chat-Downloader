@@ -21,6 +21,7 @@ def main():
     parser.add_argument('-u', f'--{Arguments.Name.USER}', type=str, help='Messages from users, separated by commas')
     parser.add_argument(f'--{Arguments.Name.FIRST}', type=int, default=5, help='Download chat from the last n VODs')
     parser.add_argument(f'--{Arguments.Name.CLIENT_ID.replace("_", "-")}', type=str, help='Twitch client ID')
+    parser.add_argument(f'--{Arguments.Name.OAUTH_TOKEN.replace("_", "-")}', type=str, help='Twitch Oauth token')
     parser.add_argument(f'--{Arguments.Name.VERBOSE}', action='store_true', help='Verbose output')
     parser.add_argument('-q', f'--{Arguments.Name.QUIET}', action='store_true')
     parser.add_argument('-o', f'--{Arguments.Name.OUTPUT}', type=str, help='Output directory', default='./')
@@ -51,7 +52,10 @@ def main():
     if Arguments().settings:
         Logger().log(str(Settings().filepath))
         return
-
+    
+    # Oauth Token
+    Settings().config['oauth_token'] = Arguments().oauth_token or Settings().config.get('oauth_token', None) 
+                        
     # Client ID
     Settings().config['client_id'] = Arguments().client_id or Settings().config.get('client_id', None) or input(
         'Twitch client ID: ').strip()
