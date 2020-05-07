@@ -19,7 +19,7 @@ from .settings import Settings
 class Downloader:
 
     def __init__(self):
-        self.helix_api = Helix(client_id=Settings().config['client_id'], bearer_token=Settings().config['oauth_token'], use_cache=True)
+        self.helix_api = Helix(client_id=Settings().config['client_id'], bearer_token=Arguments().oauth_token, use_cache=True)
 
         self.formats: List[str] = []
         self.whitelist: List[str] = []

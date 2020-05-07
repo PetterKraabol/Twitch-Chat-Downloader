@@ -3,13 +3,15 @@ import os
 from pathlib import Path
 from typing import List, Callable
 
+import requests
+
 from .arguments import Arguments
 from .downloader import Downloader
 from .logger import Logger, Log
 from .settings import Settings
 
 __name__: str = 'tcd'
-__version__: str = '3.1.3'
+__version__: str = '3.2.0'
 __all__: List[Callable] = [Arguments, Settings, Downloader, Logger, Log]
 
 
@@ -21,7 +23,7 @@ def main():
     parser.add_argument('-u', f'--{Arguments.Name.USER}', type=str, help='Messages from users, separated by commas')
     parser.add_argument(f'--{Arguments.Name.FIRST}', type=int, default=5, help='Download chat from the last n VODs')
     parser.add_argument(f'--{Arguments.Name.CLIENT_ID.replace("_", "-")}', type=str, help='Twitch client ID')
-    parser.add_argument(f'--{Arguments.Name.OAUTH_TOKEN.replace("_", "-")}', type=str, help='Twitch Oauth token')
+    parser.add_argument(f'--{Arguments.Name.CLIENT_SECRET.replace("_", "-")}', type=str, help='Twitch client secret')
     parser.add_argument(f'--{Arguments.Name.VERBOSE}', action='store_true', help='Verbose output')
     parser.add_argument('-q', f'--{Arguments.Name.QUIET}', action='store_true')
     parser.add_argument('-o', f'--{Arguments.Name.OUTPUT}', type=str, help='Output directory', default='./')
@@ -52,14 +54,18 @@ def main():
     if Arguments().settings:
         Logger().log(str(Settings().filepath))
         return
-    
-    # Oauth Token
-    Settings().config['oauth_token'] = Arguments().oauth_token or Settings().config.get('oauth_token', None) 
-                        
+
     # Client ID
     Settings().config['client_id'] = Arguments().client_id or Settings().config.get('client_id', None) or input(
         'Twitch client ID: ').strip()
+    Settings().config['client_secret'] = Arguments().client_secret or Settings().config.get('client_secret', None) or input(
+        'Twitch client secret: ').strip()
     Settings().save()
+
+    Arguments().oauth_token = requests.post(f"https://id.twitch.tv/oauth2/token"
+                                            f"?client_id={Settings().config['client_id']}"
+                                            f"&client_secret={Settings().config['client_secret']}"
+                                            f"&grant_type=client_credentials").json()['access_token']
 
     # List formats
     if Arguments().print_formats:

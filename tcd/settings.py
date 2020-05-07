@@ -99,8 +99,9 @@ class Settings(metaclass=Singleton):
         Logger().log(f'Updating settings file to v{new_config["version"]}')
 
         # Copy client ID to new config file
-        Logger().log('Transferring client id', Log.VERBOSE)
+        Logger().log('Transferring client id and secret', Log.VERBOSE)
         new_config['client_id'] = self.config.get('client_id', None)
+        new_config['client_secret'] = self.config.get('client_secret', None)
 
         # Copy user-defined formats to new config file
         for format_name, format_dictionary in dict(self.config['formats']).items():
