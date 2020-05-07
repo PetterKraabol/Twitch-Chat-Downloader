@@ -19,6 +19,7 @@ class Arguments(metaclass=Singleton):
         VERSION: str = 'version'
         OUTPUT: str = 'output'
         CLIENT_ID: str = 'client_id'
+        OAUTH_TOKEN: str = 'oauth_token'
         CHANNEL: str = 'channel'
         USER: str = 'user'
         INCLUDES: str = 'includes'
@@ -54,6 +55,7 @@ class Arguments(metaclass=Singleton):
 
         # Optional or prompted arguments
         self.client_id: Optional[str] = arguments[Arguments.Name.CLIENT_ID]
+        self.oauth_token: Optional[str] = arguments[Arguments.Name.OAUTH_TOKEN]
         self.first: Optional[int] = arguments[Arguments.Name.FIRST]
         self.timezone: Optional[str] = arguments[Arguments.Name.TIMEZONE]
         self.includes: Optional[str] = arguments[Arguments.Name.INCLUDES]
