@@ -103,5 +103,5 @@ class Logger(metaclass=Singleton):
         :param filename: File to save to
         :return: None
         """
-        with open(filename, 'w') as file:
+        with open(filename, 'w', encoding='utf-8') as file:
             [file.write('{}\n'.format(log.full())) for log in self.logs]
