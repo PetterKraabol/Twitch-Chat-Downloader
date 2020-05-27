@@ -34,10 +34,10 @@ def main():
     parser.add_argument(f'--{Arguments.Name.VERSION}', action='store_true', help='Settings version')
     parser.add_argument(f'--{Arguments.Name.FORMATS}', action='store_true', help='List available formats')
     parser.add_argument(f'--{Arguments.Name.PREVIEW}', action='store_true', help='Preview output')
-    parser.add_argument(f'--{Arguments.Name.SETTINGS}', action='store_true', help='Preview output')
+    parser.add_argument(f'--{Arguments.Name.SETTINGS}', action='store_true', help='Print settings file location')
     parser.add_argument(f'--{Arguments.Name.SETTINGS_FILE.replace("_", "-")}', type=str,
                         default=str(Path.home()) + '/.config/tcd/settings.json',
-                        help='Settings file location')
+                        help='Use a custom settings file')
     parser.add_argument(f'--{Arguments.Name.DEBUG}', action='store_true', help='Print debug messages')
     parser.add_argument(f'--{Arguments.Name.LOG}', action='store_true', help='Save log file')
 
