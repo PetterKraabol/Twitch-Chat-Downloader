@@ -4,14 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "*"
-python-dateutil = "*"
-pytz = ">=2018.9"
-twitch-python = ">=0.0.18"
+requests = "2.23.0"
+python-dateutil = "2.8.1"
+pytz = "2020.1"
+twitch-python = "0.0.18"
 
 [dev-packages]
-wheel = "*"
-twine = "*"
+wheel = "0.34.2"
+twine = "3.1.1"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

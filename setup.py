@@ -8,9 +8,9 @@ this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'readme.md'), encoding='utf-8') as f:
     readme = f.read()
 
-requirements = ['requests', 'rx>=3.0.0', 'twitch-python', 'pytz', 'python-dateutil']
-test_requirements = ['twine', 'wheel']
-setup_requirements = ['pipenv', 'setuptools']
+requirements = ['requests>=2.23.0', 'twitch-python>=0.0.18', 'pytz>=2020.1', 'python-dateutil>=2.8.1']
+test_requirements = ['twine>=3.1.1', 'wheel>=0.34.2']
+setup_requirements = ['pipenv>=2020.5.28', 'setuptools>=47.1.1']
 
 setup(
     author='Petter Kraabøl',
@@ -37,7 +37,7 @@ setup(
     keywords='Twitch',
     name='tcd',
     packages=find_packages(),
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
