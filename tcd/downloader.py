@@ -123,7 +123,7 @@ class Downloader:
                                        end=video_duration.seconds,
                                        description='json')
 
-            with open(output, 'w') as file:
+            with open(output, 'w', encoding='utf-8') as file:
                 json.dump(data, file, indent=4, sort_keys=True)
 
             Logger().log(f'[json] {output}')
