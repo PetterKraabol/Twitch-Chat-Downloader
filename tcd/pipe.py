@@ -58,6 +58,7 @@ class Pipe:
         """
 
         # Video title
+        video_data = dict(video_data)
         video_data['title'] = Pipe.get_valid_filename(video_data['title'])
 
         # Output directory and file
