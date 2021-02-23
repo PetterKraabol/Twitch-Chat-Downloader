@@ -48,6 +48,10 @@ class Pipe:
         :param comment_data: Comment data
         :return: Formatted comment line
         """
+        if not comment_data['commenter']:
+            comment_data['commenter'] = SafeDict()
+        if not comment_data['message']:
+            comment_data['message'] = SafeDict()
         return self.format(comment_data)
 
     def output(self, video_data: Dict[str, Any]) -> str:
