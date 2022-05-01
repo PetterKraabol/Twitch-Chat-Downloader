@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "73e9ad4e6b6824a2687ecd5cd027ce9d2b412e0bca95a0a4e60a5fafd8e18e17"
+            "sha256": "f766820a857c8d158c278f7acfc69a0af04e3a020ee1e10be97b07db72010c38"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -81,11 +81,11 @@
         },
         "twitch-python": {
             "hashes": [
-                "sha256:b0b02abdd33458e4ffabc632aa6a6779f3599e188819632551353b6c5553f5c5",
-                "sha256:b2b05ec15c7a081e1eaa2141c8d5084a1aeaaca7c25c34cbce46ce88877b94bc"
+                "sha256:6e09d7210b8e0abb6892767d722079eb35b14c29e770cdb4df64d569ecbaa17c",
+                "sha256:8fb28e8484ee8151230998a249f72c878c54fe54bedfa5fbc19f4118b6a5afde"
             ],
             "index": "pypi",
-            "version": "==0.0.19"
+            "version": "==0.0.20"
         },
         "urllib3": {
             "hashes": [

@@ -8,9 +8,9 @@ this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, 'readme.md'), encoding='utf-8') as f:
     readme = f.read()
 
-requirements = ['requests>=2.23.0', 'twitch-python>=0.0.18', 'pytz>=2020.1', 'python-dateutil>=2.8.1']
-test_requirements = ['twine>=3.1.1', 'wheel>=0.34.2']
-setup_requirements = ['pipenv>=2020.5.28', 'setuptools>=47.1.1']
+requirements = ['requests==2.27.1', 'twitch-python==0.0.20', 'pytz==2022.1', 'python-dateutil==2.8.2']
+test_requirements = ['twine==4.0.0', 'wheel==0.37.1']
+setup_requirements = ['pipenv==2022.4.30', 'setuptools==62.1.']
 
 setup(
     author='Petter Kraabøl',
@@ -43,6 +43,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/PetterKraabol/Twitch-Chat-Downloader',
-    version='3.2.1',
+    version='3.2.2',
     zip_safe=True,
 )
