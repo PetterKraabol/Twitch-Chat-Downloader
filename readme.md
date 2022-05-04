@@ -36,5 +36,4 @@ tcd --channel sodapoppin,nymn,lirik --first=10
 
 ---
 
-[Documentation](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki)
- • [Twitch Python](https://github.com/PetterKraabol/Twitch-Python)
+[Documentation](https://github.com/PetterKraabol/Twitch-Chat-Downloader/wiki) • [Twitch Python](https://github.com/PetterKraabol/Twitch-Python)
