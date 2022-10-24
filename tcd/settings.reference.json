@@ -21,6 +21,21 @@
                 }
             }
         },
+        "csv": {
+            "comments": {
+                "format": "{timestamp[relative]}, {commenter[display_name]}, \"{message[body]}\"",
+                "ignore_new_messages": false,
+                "timestamp": {
+                    "relative": "%X"
+                }
+            },
+            "output": {
+                "format": "{id}.csv",
+                "timestamp": {
+                    "absolute": "%x"
+                }
+            }
+        },
         "irc": {
             "comments": {
                 "action_format": "[{timestamp[relative]}] *{commenter[display_name]} {message[body]}]",
