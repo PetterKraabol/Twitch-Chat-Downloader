@@ -10,7 +10,7 @@ pytz = "2022.1"
 twitch-python = "0.0.20"
 
 [dev-packages]
-wheel = "0.37.1"
+wheel = "0.38.1"
 twine = "4.0.0"
 
 [requires]
